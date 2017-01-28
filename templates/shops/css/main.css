@@ -1,0 +1,155 @@
+@media only screen and (max-width:1080px), only screen and (max-device-width:1080px) {
+    html,body {
+        font-size:16.875px;
+    }
+}
+@media only screen and (max-width: 960px), only screen and (max-device-width: 960px) {
+    html,body {
+        font-size:15px;
+    }
+}
+@media only screen and (max-width: 800px), only screen and (max-device-width: 800px) {
+    html,body {
+        font-size:12.5px;
+    }
+}
+@media only screen and (max-width: 720px), only screen and (max-device-width: 720px) {
+    html,body {
+        font-size:11.25px;
+    }
+}
+@media only screen and (max-width: 640px), only screen and (max-device-width: 640px) {
+    html,body {
+        font-size:10px;
+    }
+}
+@media only screen and (max-width: 600px), only screen and (max-device-width: 600px) {
+    html,body {
+        font-size:9.375px;
+    }
+}
+@media only screen and (max-width: 540px), only screen and (max-device-width: 540px) {
+    html,body {
+        font-size:8.4375px;
+    }
+}
+@media only screen and (max-width: 480px), only screen and (max-device-width: 480px) {
+    html,body {
+        font-size:7.5px;
+    }
+}
+@media only screen and (max-width: 414px), only screen and (max-device-width: 414px) {
+    html,body {
+        font-size:6.46875px;
+    }
+}
+@media only screen and (max-width: 400px), only screen and (max-device-width: 400px) {
+    html,body {
+        font-size:6.25px;
+    }
+}
+@media only screen and (max-width: 375px), only screen and (max-device-width: 375px) {
+    html,body {
+        font-size:5.859375px;
+    }
+}
+@media only screen and (max-width: 360px), only screen and (max-device-width: 360px) {
+    html,body {
+        font-size:5.625px;
+    }
+}
+@media only screen and (max-width: 320px), only screen and (max-device-width: 320px) {
+    html,body {
+        font-size:5px;
+    }
+}
+@media only screen and (max-width: 240px), only screen and (max-device-width: 240px) {
+    html,body {
+        font-size:3.75px;
+    }
+}
+body{
+    margin:0;
+    padding:0;
+    background: #F0f0f0;
+}
+h1{
+    margin:0 auto;
+    color:#a5f500;
+    font-size: 3rem;
+    width:30rem;
+    text-align: center;
+}
+form{
+    width:30rem;
+    /*height:30rem;*/
+    border:solid 1px #b5f677;
+    border-radius: 1rem;
+    background: #FFF;
+    margin:0 auto;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+}
+form>*{
+    width:20rem;
+    height:2rem;
+    margin:1rem;
+    display: block;
+    font-size: 1rem;
+    padding:0;
+    box-sizing: border-box;
+    border:0;
+    border-bottom:1px coral solid;
+    background-color: #FFF;
+    color:#666;
+}
+form>select{
+    /*-webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;*/
+}
+form>textarea{
+    height:10rem;
+    resize: none;
+    border:1px coral solid;
+}
+form>div>input[type="button"]{
+    width: 6rem;
+    height:2rem;
+    border: 0;
+    border-radius: 0.2rem;
+    background-color:aqua;
+    color:#FFF;
+    transition: 0.5s;
+    margin:1rem auto;
+    display: block;
+    color:#000;
+
+}
+form>div>img{
+    border:0;
+    width:16rem;
+    height:16rem;
+    display: block;
+    margin:0 auto;
+}
+form>div{
+    width:20rem;
+    height:20rem;
+    border: solid 1px coral;
+}
+form>input[type="button"]{
+    width:10rem;
+    border: 0;
+    border-radius: 0.2rem;
+    background-color:coral;
+    color:#FFF;
+    transition: 0.5s;
+}
+form>input[type="button"]:hover{
+    opacity: 0.8;
+}
+form>input[type="button"]:focus {
+    background-color: #a5f500;
+}

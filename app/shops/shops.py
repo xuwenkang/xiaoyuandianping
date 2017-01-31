@@ -4,7 +4,11 @@ from flask import Blueprint, request
 from jinja2 import TemplateNotFound
 import json
 
-from app.datas_base.mongo_base import save_store_info, get_store_type
+from app.datas_base.mongo_base import save_store_info, get_store_type, get_store_info, \
+    pass_store, against_store
+from app.shops.backstage.user import User
+
+user = User()
 
 page = Blueprint('page', __name__, template_folder='templates')
 
@@ -18,7 +22,7 @@ def show(page):
 @page.route('/add_store', methods=['POST'])
 def add_store():
     try:
-        storName = request.form.get('storeName')
+        storeName = request.form.get('storeName')
         storePosition = request.form.get('storePosition')
         storeType = request.form.get('storeType')
         storeDesc = request.form.get('storeDesc')
@@ -44,10 +48,42 @@ def get_store_types():
 
 @page.route('/test', methods=['GET'])
 def test():
-    print 'sb'
+    print 'test'
     return 'test'
 
-@page.route('/backstage-login', methods=['POST'])
+@page.route('/backstage_login', methods=['POST'])
 def backstage_login():
-    print 'backstage'
-    return json.dumps({'status': 404})
+
+    user_name = request.form['user_name']
+    password = request.form['password']
+
+    if not user.is_exist(user_name):
+        if not user.validate(user_name, password):
+            return json.dumps({'status': 404, 'msg': 'password is not correct!'})
+        else:
+            return json.dumps({'status': 200})
+    else:
+        return json.dumps({'status': 404, 'msg': 'this user is not exist!'})
+
+@page.route('/backstage_index', methods=['POST'])
+def backstage_index():
+    msg = get_store_info()
+    return json.dumps({'status': 200, 'dataSet':msg})
+
+@page.route('/backstage_pass_store', methods=['POST'])
+def backstage_pass_store():
+    store_name = request.form['store_name']
+    try:
+        pass_store(store_name)
+        return json.dumps({'status': 200, 'msg': '修改成功！'})
+    except:
+        return json.dumps({'status': 404, 'msg': '修改失败！'})
+
+@page.route('/backstage_against_store', methods=['POST'])
+def backstage_against_store ():
+    store_name = request.form['store_name']
+    try:
+        against_store(store_name)
+        return json.dumps({'status': 200, 'msg':'修改成功！'})
+    except:
+        return json.dumps({'status': 404, 'msg':'修改失败！'})

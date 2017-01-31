@@ -19,11 +19,11 @@ document.onkeydown=function(event){
 	登录信息验证
 */
 function login_validate(){
-	if (!validate_string('name', 8, 16, false, "账户")){
+	if (!validate_string('name', 4, 16, false, "账户")){
 		$("input[name='name']").focus();
 		return false;
 	}
-	if (!validate_string('password', 6, 16, false, "密码")){
+	if (!validate_string('password', 4, 16, false, "密码")){
 		$("input[name='password']").focus();
 		return false;
 	}
@@ -75,18 +75,23 @@ function validate_string(name, min_length, max_length, isEmpty, ch_name){
 	ajax 传输数据
 */
 function ajax_post(){
+    user_name = $("input[name='name']").val()
+    password = $("input[name='password']").val()
 
-	var url = "/shops/backstage-login";
+	var url = "/shops/backstage_login";
     $.ajax({
         type: "POST",
         url: url,
         async:false,//同步
         cache:false,//debug的时候设置为false
-        data:{},
+        data:{'user_name': user_name, 'password': password},
         dataType: "json",
         success: function(data){
             //var userName = data.userName;
-            alert(data.status);
+            if (data.status == 200)
+                window.location = "index.html";
+            else
+                alert(data.msg)
             //window.location = "bfrontstage/front_personal_info.jsp?userId="+userId+"&userName="+userName+"&sid="+sid;
         }
 	});

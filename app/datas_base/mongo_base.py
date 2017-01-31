@@ -17,7 +17,7 @@ def get_mongodb_instance(db='test'):
 def save_store_info(storName, storePosition, storeType, storeDesc, storeImg):
     db = get_mongodb_instance()
     db.store_info.insert({
-        'storName': storName,
+        'storeName': storName,
         'storePosition': storePosition,
         'storeType': storeType,
         'storeDesc': storeDesc,
@@ -35,12 +35,38 @@ def get_store_type():
         result.append(temp)
     return result
 
-if __name__ == "__main__":
+# 获取商店申请信息
+def get_store_info():
     db = get_mongodb_instance()
+    store_infos = db.store_info.find({'status': 'waiting'})
+    store_list = []
+    for store_info in store_infos:
+        store = []
+        store.append(store_info['storeName'])
+        store.append(store_info['storeDesc'])
+        store.append(store_info['storePosition'])
+        store.append(store_info['storeType'])
+        store.append(store_info['time'])
+        store_list.append(store)
+    return store_list
+
+# 申请信息通过
+def pass_store(store_name):
+    db = get_mongodb_instance()
+    db.store_info.update({'storeName':store_name}, {'$set':{'status':'pass'}})
+
+# 申请信息不通过
+def against_store(store_name):
+    db = get_mongodb_instance()
+    db.store_info.update({'storeName':store_name}, {'$set':{'status':'fail'}})
+
+if __name__ == "__main__":
+    # db = get_mongodb_instance()
     """
     db.store_type.insert({
         'type_id': '001',
         'type_name': '咖啡厅',
         })
     """
-    print get_store_type()
+    # print get_store_type()
+    print get_store_info()

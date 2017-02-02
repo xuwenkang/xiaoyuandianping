@@ -4,7 +4,7 @@ from flask import Blueprint, request
 from jinja2 import TemplateNotFound
 import json
 
-from app.datas_base.mongo_base import save_store_info, get_store_type, get_store_info, \
+from app.datas_base.mongo_base import get_index_info, save_store_info, get_store_type, get_store_info, \
     pass_store, against_store
 from app.shops.backstage.user import User
 
@@ -13,10 +13,12 @@ user = User()
 page = Blueprint('page', __name__, template_folder='templates')
 
 # 保存提交的店铺信息
+"""
 @page.route('/', defaults={'page': 'index'}, methods=['POST'])
 @page.route('/<page>', methods=['POST'])
 def show(page):
     return 'HELLO'
+"""
 
 
 @page.route('/add_store', methods=['POST'])
@@ -51,6 +53,14 @@ def test():
     print 'test'
     return 'test'
 
+@page.route('/', methods=['POST', 'GET'])
+@page.route('/index', methods=['POST', 'GET'])
+def index():
+    list1 = get_index_info()
+    return json.dumps({'list1': list1})
+
+
+# 后台页面
 @page.route('/backstage_login', methods=['POST'])
 def backstage_login():
 

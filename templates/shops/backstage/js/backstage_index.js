@@ -1,9 +1,3 @@
-function del(id){
-    alert(id);
-	if(confirm("您确定要删除吗?")){
-
-	}
-}
 $("#checkall").click(function(){
   $("input[name='id[]']").each(function(){
 	  if (this.checked) {

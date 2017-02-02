@@ -2,6 +2,7 @@
 __author__ = 'xuwenkang'
 import pymongo
 
+
 # 获取mongodb 数据库实例
 def get_mongodb_instance(db='test'):
     """
@@ -12,6 +13,23 @@ def get_mongodb_instance(db='test'):
     client = pymongo.MongoClient(MONGO_HOST, MONGO_PORT)
     # the default data_base name is shops
     return client.shops
+
+# 获取主页数据
+def get_index_info():
+    db = get_mongodb_instance()
+    store_type_list = []
+    # 获取商品分类信息
+    for type in get_store_type():
+        list1 = {}
+        # 获取商品点名信息
+        list1['title'] = type['type_name']
+        store_list = []
+        for temp in db.store_info.find({'storeType':type['type_id']}):
+            store_list.append(temp['storeName'])
+        list1['subTitle'] = store_list
+        store_type_list.append(list1)
+    return store_type_list
+
 
 # 保存提交的店铺信息
 def save_store_info(storName, storePosition, storeType, storeDesc, storeImg):
@@ -69,4 +87,5 @@ if __name__ == "__main__":
         })
     """
     # print get_store_type()
-    print get_store_info()
+    #print get_store_info()
+    get_index_info()

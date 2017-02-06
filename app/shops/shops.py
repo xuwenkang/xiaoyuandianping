@@ -4,8 +4,7 @@ from flask import Blueprint, request
 from jinja2 import TemplateNotFound
 import json
 
-from app.datas_base.mongo_base import get_index_info, save_store_info, get_store_type, get_store_info, \
-    pass_store, against_store
+from app.datas_base.mongo_base import Shops, BackstageShops
 from app.shops.backstage.user import User
 
 user = User()
@@ -45,20 +44,30 @@ def add_store():
 # 获取商店类型信息  
 @page.route('/get_store_type', methods=['GET'])
 def get_store_types():
-    result = get_store_type()
+    result = Shops.get_store_type()
     return json.dumps(result)
 
-@page.route('/test', methods=['GET'])
-def test():
-    print 'test'
-    return 'test'
-
+# 主页
 @page.route('/', methods=['POST', 'GET'])
 @page.route('/index', methods=['POST', 'GET'])
 def index():
-    list1 = get_index_info()
-    return json.dumps({'list1': list1})
+    result = Shops.get_index_info()
+    return json.dumps({'list1': result[0], 'list2': result[1]})
 
+# 店铺列表信息
+@page.route('/stores_list/<type_name>', methods=['POST', 'GET'])
+def get_stores_list(type_name):
+    result = Shops.get_stores_list(type_name)
+    return json.dumps({'data': result})
+    #return json.dumps()
+
+# 评论信息
+@page.route('/comments_list/')
+def get_comments_list():
+    store_name = request.form['store_name']
+    mac = request.form['mac']
+    result = Shops.get_comments_info(store_name, mac)
+    return json.dumps({'data': result})
 
 # 后台页面
 @page.route('/backstage_login', methods=['POST'])
@@ -77,14 +86,14 @@ def backstage_login():
 
 @page.route('/backstage_index', methods=['POST'])
 def backstage_index():
-    msg = get_store_info()
+    msg = BackstageShops.get_store_info()
     return json.dumps({'status': 200, 'dataSet':msg})
 
 @page.route('/backstage_pass_store', methods=['POST'])
 def backstage_pass_store():
     store_name = request.form['store_name']
     try:
-        pass_store(store_name)
+        BackstageShops.pass_store(store_name)
         return json.dumps({'status': 200, 'msg': '修改成功！'})
     except:
         return json.dumps({'status': 404, 'msg': '修改失败！'})
@@ -93,7 +102,7 @@ def backstage_pass_store():
 def backstage_against_store ():
     store_name = request.form['store_name']
     try:
-        against_store(store_name)
+        BackstageShops.against_store(store_name)
         return json.dumps({'status': 200, 'msg':'修改成功！'})
     except:
         return json.dumps({'status': 404, 'msg':'修改失败！'})

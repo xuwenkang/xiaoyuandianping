@@ -49,4 +49,4 @@ if __name__ == "__main__":
 
     user = User()
     print user.is_exist('test')
-    print user.validate('test', 'test1')
+    print user.validate('test', 'test')

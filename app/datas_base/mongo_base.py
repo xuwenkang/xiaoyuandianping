@@ -100,10 +100,23 @@ class Shops:
                 comment_info.append({'like': comment['like']})
                 comment_info.append({'dislike': comment['dislike']})
                 # 判断mac地址是否已经操作过
-                if comment['operation_mac'].count(mac) == 0:
-                    comment_info.append({'is_operation': False})
-                else:
-                    comment_info.append({'is_operation': True})
+                flag = True
+                for macs in comment['operation_mac']:
+                    mac_info = macs.split(',')
+                    if mac_info[0] == mac:
+                        flag = False
+                        if mac_info[1] == 'true':
+                            comment_info.append({'liked': True})
+                        else:
+                            comment_info.append({'liked': False})
+                        if mac_info[2] == 'true':
+                            comment_info.append({'disliked': True})
+                        else:
+                            comment_info.append({'disliked': False})
+                if flag:
+                    #comment_info.append({'is_operation': False})
+                    comment_info.append({'liked': False})
+                    comment_info.append({'disliked': False})
                 comments_list.append(comment_info)
 
         return comments_list
@@ -148,6 +161,7 @@ if __name__ == "__main__":
     """
     # print get_store_type()
     #print get_store_info()
-    #print Shops.get_index_info()[1][0]
-    #print Shops.get_stores_list('书店')
+    print Shops.get_index_info()[1][0]
+    print Shops.get_stores_list('书店')
     print Shops.get_comments_info('store2', '23477')
+    print Shops.get_comments_info('store2', '224335')

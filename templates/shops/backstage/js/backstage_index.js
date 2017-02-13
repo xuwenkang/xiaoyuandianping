@@ -52,6 +52,8 @@ function index(url = "/shops/backstage_index"){
                   '&nbsp;&nbsp;' +
                   '<a class="button border-red" href="javascript:void(0)" onclick="return pass_store(\''+value+'\')">' +
                     '<span class="icon-check"></span> 同意 </a>';
+                var pic_link = '<img src="../store_images/shop-32a29a6a-daef-11e6-9820-000c29a3ec66.png" class="img-responsive margin" style="width:100%" alt="Image">';
+                data.dataSet[i].push(pic_link);
                 data.dataSet[i].push(link);
             }
             if (data.status == 200){
@@ -63,7 +65,8 @@ function index(url = "/shops/backstage_index"){
                         { "title": "地点" },
                         { "title": "分类"},
                         { "title": "申请时间"},
-                        { "title": "操作", "sWidth":"16%"}
+                        { "title": "照片", "sWidth":"16%"},
+                        { "title": "操作", "sWidth":"16%", 'sClass': "center"}
                     ]
                 });
             }

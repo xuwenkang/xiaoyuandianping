@@ -1,5 +1,7 @@
 # -*- coding:utf-8 -*-
 from uuid import uuid1
+from flask import session
+import json
 
 from settings import img_pre
 
@@ -13,4 +15,14 @@ class CommonUtil:
             f.write(img.read())
         return img_name
 
+    @staticmethod
+    # 验证是否已经登录
+    def authentication(method):
+        def wrapper():
+            if 'user_name' in session:
+                return method()
+            else:
+                return json.dumps({'status': 404, 'msg': 'please login first!'})
+
+        return wrapper
 

@@ -81,6 +81,7 @@ class Shops:
             temp_list.append({'name':store['storeName']})
             temp_list.append({'address':store['storePosition']})
             temp_list.append({'openTime':store['open_time']})
+            temp_list.append({'picture': store['picture']})
             stores_list.append(temp_list)
 
         return stores_list
@@ -136,6 +137,7 @@ class BackstageShops:
             store.append(store_info['storePosition'])
             store.append(store_info['storeType'])
             store.append(store_info['time'])
+            store.append(store_info['picture'])
             store_list.append(store)
         return store_list
 

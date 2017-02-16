@@ -34,7 +34,6 @@ def backstage_index():
     return json.dumps({'status': 200, 'dataSet':msg})
 
 @back_page.route('/backstage_pass_store', methods=['POST'], endpoint='/backstage_pass_store')
-@CommonUtil.authentication
 def backstage_pass_store():
     store_name = request.form['store_name']
     try:
@@ -44,7 +43,6 @@ def backstage_pass_store():
         return json.dumps({'status': 404, 'msg': '修改失败！'})
 
 @back_page.route('/backstage_against_store', methods=['POST'], endpoint='/backstage_against_store')
-@CommonUtil.authentication
 def backstage_against_store ():
     store_name = request.form['store_name']
     try:

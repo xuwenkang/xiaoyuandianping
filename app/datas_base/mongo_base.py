@@ -3,6 +3,15 @@ __author__ = 'xuwenkang'
 import pymongo
 
 
+# 判断数据库是否有数据
+def is_exist(mongo_data):
+    for data in mongo_data:
+        if data:
+            return True
+        else:
+            return False
+
+
 # 获取mongodb 数据库实例
 def get_mongodb_instance(db='test'):
     """
@@ -122,6 +131,33 @@ class Shops:
 
         return comments_list
 
+    # 获取评论信息
+    @staticmethod
+    def add_comment_info(store_name, mac, content, tags, mark):
+        db = get_mongodb_instance()
+        # 判断是否有数据
+        if  is_exist(db.store_comments.find({'store_name':store_name})):
+            # 判断是否已经评论过
+            if is_exist(db.store_comments.find({'store_name': store_name, 'comments.mac':mac})):
+                return {'error':'commented'}
+            else:
+                # 更新数据,加入新的评论
+                try:
+                    db.store_comments.update({'store_name':store_name}, {'$push':{'comments':
+                        {'mac':mac,'content':content, 'like':0, 'dislike':0, 'operation_mac':[]}}})
+                    return {'error': ''}
+                except:
+                    return {'error':'commented'}
+        else:
+            # 插入新的数据
+            try:
+                db.store_comments.insert({'store_name': store_name, 'comments': [{'mac':mac,'content':content,
+                                                'like':0, 'dislike':0, 'operation_mac':[]}], 'status': 'pass'})
+                return {'error': ''}
+            except:
+                return {'error': 'commented'}
+
+
 
 class BackstageShops:
     # 获取商店申请信息
@@ -163,7 +199,8 @@ if __name__ == "__main__":
     """
     # print get_store_type()
     #print get_store_info()
-    print Shops.get_index_info()[1][0]
-    print Shops.get_stores_list('书店')
-    print Shops.get_comments_info('store2', '23477')
-    print Shops.get_comments_info('store2', '224335')
+    #print Shops.get_index_info()[1][0]
+    #print Shops.get_stores_list('书店')
+    #print Shops.get_comments_info('store2', '23477')
+    #print Shops.get_comments_info('store2', '224335')
+    print Shops.add_comment_info('store3', '32436', 'not good place!')

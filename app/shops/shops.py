@@ -4,7 +4,7 @@ from flask import Blueprint, request
 from jinja2 import TemplateNotFound
 import json
 
-from app.datas_base.mongo_base import Shops, BackstageShops
+from app.datas_base.mongo_base import Shops
 
 page = Blueprint('page', __name__, template_folder='templates')
 
@@ -59,7 +59,7 @@ def get_stores_list(type_name):
     #return json.dumps()
 
 # 评论信息
-@page.route('/comments_list/')
+@page.route('/comments_list', methods=['POST'])
 def get_comments_list():
     store_name = request.form['store_name']
     mac = request.form['mac']
@@ -67,4 +67,14 @@ def get_comments_list():
     return json.dumps({'data': result})
 
 
+# 提交评论
+@page.route('/add_comment', methods=['POST'])
+def add_comment():
+    store_name = request.form['store_name']
+    mac = request.form['mac']
+    content = request.form['comment']
+    tags = request.form['']
+    mark = request.form['mark']
+    result = Shops.add_comment_info(store_name, mac, content, mark)
 
+    return result

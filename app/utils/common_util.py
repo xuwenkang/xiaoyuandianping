@@ -23,6 +23,5 @@ class CommonUtil:
                 return method()
             else:
                 return json.dumps({'status': 404, 'msg': 'please login first!'})
-
         return wrapper
 

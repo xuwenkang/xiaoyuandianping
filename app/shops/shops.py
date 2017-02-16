@@ -1,14 +1,10 @@
 # -*- coding:utf-8 -*-
 __author__ = 'xuwenkang'
-from flask import Blueprint, request, session
+from flask import Blueprint, request
 from jinja2 import TemplateNotFound
 import json
 
 from app.datas_base.mongo_base import Shops, BackstageShops
-from app.shops.backstage.user import User
-from app.utils.common_util import CommonUtil
-
-user = User()
 
 page = Blueprint('page', __name__, template_folder='templates')
 
@@ -72,45 +68,3 @@ def get_comments_list():
 
 
 
-# 后台页面
-@page.route('/backstage_login', methods=['POST'])
-def backstage_login():
-
-    user_name = request.form['user_name']
-    password = request.form['password']
-
-    if not user.is_exist(user_name):
-        if not user.validate(user_name, password):
-            return json.dumps({'status': 404, 'msg': 'password is not correct!'})
-        else:
-            session['user_name'] = user_name
-            return json.dumps({'status': 200})
-    else:
-        return json.dumps({'status': 404, 'msg': 'this user is not exist!'})
-
-
-@page.route('/backstage_index', methods=['POST'], endpoint='/backstage_index')
-@CommonUtil.authentication
-def backstage_index():
-    msg = BackstageShops.get_store_info()
-    return json.dumps({'status': 200, 'dataSet':msg})
-
-@page.route('/backstage_pass_store', methods=['POST'], endpoint='/backstage_pass_store')
-@CommonUtil.authentication
-def backstage_pass_store():
-    store_name = request.form['store_name']
-    try:
-        BackstageShops.pass_store(store_name)
-        return json.dumps({'status': 200, 'msg': '修改成功！'})
-    except:
-        return json.dumps({'status': 404, 'msg': '修改失败！'})
-
-@page.route('/backstage_against_store', methods=['POST'], endpoint='/backstage_against_store')
-@CommonUtil.authentication
-def backstage_against_store ():
-    store_name = request.form['store_name']
-    try:
-        BackstageShops.against_store(store_name)
-        return json.dumps({'status': 200, 'msg':'修改成功！'})
-    except:
-        return json.dumps({'status': 404, 'msg':'修改失败！'})

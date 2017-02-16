@@ -78,7 +78,7 @@ function ajax_post(){
     user_name = $("input[name='name']").val()
     password = $("input[name='password']").val()
 
-	var url = "/shops/backstage_login";
+	var url = "/shops/backstage/backstage_login";
     $.ajax({
         type: "POST",
         url: url,

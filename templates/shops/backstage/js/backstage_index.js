@@ -34,9 +34,9 @@ var dataSet = [
   ];
 
 // 初始化数据
-function index(url = "/shops/backstage_index"){
+function index(url = "/shops/backstage/backstage_index"){
     //通过 ajax 获取店铺申请信息
-    var url = "/shops/backstage_index";
+    var url = "/shops/backstage/backstage_index";
     $.ajax({
         type: "POST",
         url: url,
@@ -84,13 +84,13 @@ $(document).ready(function() {
 // 审核通过
 function pass_store(id){
     if(confirm("您确定要通过吗?")){
-        operate_store(id, "/shops/backstage_pass_store");
+        operate_store(id, "/shops/backstage/backstage_pass_store");
 	}
 }
 // 审核不通过
 function against_store(id){
     if(confirm("您确定要反对吗?")){
-        operate_store(id, "/shops/backstage_against_store");
+        operate_store(id, "/shops/backstage/backstage_against_store");
 	}
 }
 // ajax

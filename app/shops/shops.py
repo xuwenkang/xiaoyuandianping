@@ -58,14 +58,21 @@ def get_stores_list():
     result = Shops.get_stores_list(type_name)
     return json.dumps({'data': result})
 
-# 评论信息
-@page.route('/comments_list', methods=['POST'])
-def get_comments_list():
-    store_name = request.form['store_name']
-    mac = request.form['mac']
-    result = Shops.get_comments_info(store_name, mac)
+# 店铺详细信息
+@page.route('/store_detail', methods=['GET'])
+def get_store_detail():
+    id = request.args.get('id')
+    result = Shops.get_store_detail(id)
     return json.dumps({'data': result})
 
+# 评论信息
+@page.route('/comments_list', methods=['GET'])
+def get_comments_list():
+    store_name = request.args.get('id')
+    #mac = request.form['mac']
+    mac = '123'
+    result = Shops.get_comments_info(store_name, mac)
+    return json.dumps({'data': result})
 
 # 提交评论
 @page.route('/add_comment', methods=['POST'])
@@ -80,7 +87,7 @@ def add_comment():
     return result
 
 # changeLikeStatus
-# store_detail
+# s
 # comments_list
 # store_list_search_data
 # store_list_data

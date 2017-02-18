@@ -88,17 +88,34 @@ class Shops:
         # 获取店铺列表信息
         for store in db.store_info.find({'storeType': type_name, 'status': 'pass'}):
             temp_list = {}
-            temp_list['id'] = 1
+            temp_list['id'] = store['storeName']
             temp_list['name'] = store['storeName']
             #temp_list.append({'address':store['storePosition']})
             temp_list['address'] = store['storePosition']
             temp_list['openTime'] = store['open_time']
-            temp_list['score'] = 9.0
+            temp_list['score'] = store['score']
             temp_list['overall'] = 8.4
-            temp_list['picURLs'] = ['store_images1/' + store['picture']]
-            temp_list['tags'] = [["环境好", 10]]
+            temp_list['picURLs'] = ['store_images/' + store['picture']]
+            temp_list['tags'] = store['tags']
             stores_list.append(temp_list)
         return stores_list
+
+    # 获取商店详情信息
+    @staticmethod
+    def get_store_detail(name):
+        db = get_mongodb_instance()
+        temp_list = {}
+
+        for store in db.store_info.find({'storeName':name, 'status': 'pass'}):
+            #temp_list['id'] = store['storeName']
+            temp_list['name'] = store['storeName']
+            temp_list['address'] = store['storePosition']
+            temp_list['openTime'] = store['open_time']
+            temp_list['score'] = store['score']
+            temp_list['picURLs'] = ['store_images/' + store['picture']]
+            #temp_list['tags'] = [["环境好"], ["good drink"]]
+            temp_list['tags'] = store['tags']
+        return temp_list
 
     # 获取评论信息
     @staticmethod
@@ -107,13 +124,14 @@ class Shops:
         db = get_mongodb_instance()
         for comments in db.store_comments.find({'store_name': store_name,  'status': 'pass'}):
             for comment in comments['comments']:
-                comment_info = []
-                comment_info.append({'store_name': store_name})
-                comment_info.append({'id': comment['comment_id']})
-                comment_info.append({'value': comment['content']})
-                comment_info.append({'date': comment['date']})
-                comment_info.append({'like': comment['like']})
-                comment_info.append({'dislike': comment['dislike']})
+                print comment
+                comment_info = {}
+                #comment_info.append({'store_name': store_name})
+                comment_info['id'] = comment['comment_id']
+                comment_info['value'] = comment['content']
+                comment_info['date'] = comment['date']
+                comment_info['like'] = comment['like']
+                comment_info['dislike'] = comment['dislike']
                 # 判断mac地址是否已经操作过
                 flag = True
                 for macs in comment['operation_mac']:
@@ -121,17 +139,17 @@ class Shops:
                     if mac_info[0] == mac:
                         flag = False
                         if mac_info[1] == 'true':
-                            comment_info.append({'liked': True})
+                            comment_info['liked'] = True
                         else:
-                            comment_info.append({'liked': False})
+                            comment_info['liked'] = False
                         if mac_info[2] == 'true':
-                            comment_info.append({'disliked': True})
+                            comment_info['disliked'] = True
                         else:
-                            comment_info.append({'disliked': False})
+                            comment_info['disliked'] = False
                 if flag:
                     #comment_info.append({'is_operation': False})
-                    comment_info.append({'liked': False})
-                    comment_info.append({'disliked': False})
+                    comment_info['dislike'] = False
+                    comment_info['dislike'] = False
                 comments_list.append(comment_info)
 
         return comments_list
@@ -205,7 +223,8 @@ if __name__ == "__main__":
     # print get_store_type()
     #print get_store_info()
     #print Shops.get_index_info()[0]
-    print Shops.get_stores_list('coffee')
+    #print Shops.get_stores_list('coffee')
     #print Shops.get_comments_info('store2', '23477')
-    #print Shops.get_comments_info('store2', '224335')
+    print Shops.get_comments_info('store2', '224335')
     #print Shops.add_comment_info('store3', '32436', 'not good place!')
+    #print Shops.get_store_detail('store2')

@@ -1,0 +1,42 @@
+<?php
+header("content-type:application/json;char-set:UTF-8");
+$data=[
+    [
+        "title"=>"类型",
+        "placeholder"=>"",
+        "inputType"=>"select",
+        "necessary"=>"true",
+        "ops"=>[
+            ["name"=>"aygfy","id"=>1],
+            ["name"=>"bsd","id"=>2],
+            ["name"=>"b","id"=>54],
+            ["name"=>"bsfd","id"=>545]
+        ]],
+    [
+        "title"=>"商家名称",
+        "placeholder"=>"必填",
+        "inputType"=>"shortText",
+        "necessary"=>"true"
+
+    ],
+    [
+        "title"=>"地址",
+        "placeholder"=>"请描述具体位置",
+        "inputType"=>"shortText",
+        "necessary"=>"true"
+    ],
+    [
+        "title"=>"营业时间",
+        "placeholder"=>"选填",
+        "inputType"=>"shortText",
+        "necessary"=>"false"
+    ],
+    [
+        "title"=>"描述",
+        "placeholder"=>"选填",
+        "inputType"=>"longText",
+        "necessary"=>"false"
+    ]
+];
+echo(json_encode(["error"=>"","data"=>$data]));
+?>

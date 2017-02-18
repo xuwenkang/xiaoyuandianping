@@ -1,0 +1,49 @@
+<?php
+	header("content-type:application/json;char-set:UTF-8");
+	$data = [
+      "name"=>"地址",
+      "openTime"=>"9:00 - 21:00",
+      "address"=>"地址地址地址地址地址地址",
+      "picURLs"=>["","","","","","","","","","","",""],
+      "tags"=>[["地址A",5],["地址",5],["A地址",5],["地A址",5]],
+      "score"=>"9",
+      "comments"=>[
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false],
+        ["id"=>512,"value"=>"红豆牛奶超级好喝...下次点别的尝一下～～01","date"=>time()-rand(0,100000000),"like"=>rand(0,1000),"dislike"=>1,"liked"=>$r=rand(0,100)>50?true:false,"disliked"=>$r<=50?true:false]
+      ]
+	];
+  echo(json_encode(["error"=>"","data"=>$data]));
+?>

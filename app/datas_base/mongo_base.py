@@ -38,10 +38,14 @@ class Shops:
             list1 = {}
             # 获取商品点名信息
             list1['title'] = type['type_name']
+            """
             store_list = []
             for temp in db.store_info.find({'storeType':type['type_id']}):
                 store_list.append(temp['storeName'])
             list1['subTitle'] = store_list
+            """
+            print type['sub_type']
+            list1['subTitle'] = type['sub_type']
             store_type_list.append(list1)
 
         # 获取热门店铺
@@ -72,6 +76,7 @@ class Shops:
             temp = {}
             temp['type_name'] = store_type['type_name']
             temp['type_id'] = store_type['type_id']
+            temp['sub_type'] = store_type['sub_type']
             result.append(temp)
         return result
 
@@ -80,19 +85,19 @@ class Shops:
     def get_stores_list(type_name):
         stores_list = []
         db = get_mongodb_instance()
-        # 获取类型编号
-        type_id = None
-        for temp in db.store_type.find({'type_name': type_name}):
-            type_id = temp['type_id']
         # 获取店铺列表信息
-        for store in db.store_info.find({'storeType': type_id, 'status': 'pass'}):
-            temp_list = []
-            temp_list.append({'name':store['storeName']})
-            temp_list.append({'address':store['storePosition']})
-            temp_list.append({'openTime':store['open_time']})
-            temp_list.append({'picture': store['picture']})
+        for store in db.store_info.find({'storeType': type_name, 'status': 'pass'}):
+            temp_list = {}
+            temp_list['id'] = 1
+            temp_list['name'] = store['storeName']
+            #temp_list.append({'address':store['storePosition']})
+            temp_list['address'] = store['storePosition']
+            temp_list['openTime'] = store['open_time']
+            temp_list['score'] = 9.0
+            temp_list['overall'] = 8.4
+            temp_list['picURLs'] = ['store_images1/' + store['picture']]
+            temp_list['tags'] = [["环境好", 10]]
             stores_list.append(temp_list)
-
         return stores_list
 
     # 获取评论信息
@@ -199,8 +204,8 @@ if __name__ == "__main__":
     """
     # print get_store_type()
     #print get_store_info()
-    #print Shops.get_index_info()[1][0]
-    #print Shops.get_stores_list('书店')
+    #print Shops.get_index_info()[0]
+    print Shops.get_stores_list('coffee')
     #print Shops.get_comments_info('store2', '23477')
     #print Shops.get_comments_info('store2', '224335')
-    print Shops.add_comment_info('store3', '32436', 'not good place!')
+    #print Shops.add_comment_info('store3', '32436', 'not good place!')

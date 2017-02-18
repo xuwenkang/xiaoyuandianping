@@ -49,14 +49,14 @@ def get_store_types():
 @page.route('/index', methods=['POST', 'GET'])
 def index():
     result = Shops.get_index_info()
-    return json.dumps({'list1': result[0], 'list2': result[1]})
+    return json.dumps({'topic': 'hello','list1': result[0], 'list2': result[1]})
 
 # 店铺列表信息
-@page.route('/stores_list/<type_name>', methods=['POST', 'GET'])
-def get_stores_list(type_name):
+@page.route('/store_list_data', methods=['POST', 'GET'])
+def get_stores_list():
+    type_name = request.args.get('type')
     result = Shops.get_stores_list(type_name)
     return json.dumps({'data': result})
-    #return json.dumps()
 
 # 评论信息
 @page.route('/comments_list', methods=['POST'])
@@ -78,3 +78,9 @@ def add_comment():
     result = Shops.add_comment_info(store_name, mac, content, mark)
 
     return result
+
+# changeLikeStatus
+# store_detail
+# comments_list
+# store_list_search_data
+# store_list_data

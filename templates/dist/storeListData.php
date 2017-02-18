@@ -1,0 +1,66 @@
+<?php
+if($_GET["type"]=="擦费"){
+	header("content-type:application/json;char-set:UTF-8");
+	$data = [
+		[
+			"id"=>1,
+			"name"=>"老再",
+			"openTime"=>"6:00-24:00",
+			"address"=>"XXXXXXX",
+			"score"=>9.0,
+			"overall"=>9.8,
+			"picURLs"=>["path/to/pic1","最好是绝对路径"],
+			"tags"=>[["环境好",10],["适合自习",20],["难喝",7]]
+		],
+		[
+			"id"=>2,
+			"name"=>"F2",
+			"openTime"=>"6:00-24:00",
+			"address"=>"XXXXXXX",
+			"score"=>7.0,
+			"overall"=>6.8,
+			"picURLs"=>["",""],
+			"tags"=>[["环境好",1],["不适合自习",5],["难喝",7]]
+		],
+		[
+   		"id"=>2,
+   		"name"=>"F2",
+   		"openTime"=>"6:00-24:00",
+  		"address"=>"XXXXXXX",
+  		"score"=>7.0,
+   		"overall"=>6.8,
+ 			"picURLs"=>["",""],
+ 			"tags"=>[["环境好",1],["不适合自习",5],["难喝",7]]
+    ],
+    [
+       		"id"=>2,
+       		"name"=>"F2",
+       		"openTime"=>"6:00-24:00",
+      		"address"=>"XXXXXXX",
+      		"score"=>7.0,
+       		"overall"=>6.8,
+     			"picURLs"=>["",""],
+     			"tags"=>[["环境好",1],["不适合自习",5],["难喝",7]]
+        ],[
+             		"id"=>2,
+             		"name"=>"F2",
+             		"openTime"=>"6:00-24:00",
+            		"address"=>"XXXXXXX",
+            		"score"=>7.0,
+             		"overall"=>6.8,
+           			"picURLs"=>["",""],
+           			"tags"=>[["环境好",1],["不适合自习",5],["难喝",7]]
+              ],[
+                   		"id"=>2,
+                   		"name"=>"F2",
+                   		"openTime"=>"6:00-24:00",
+                  		"address"=>"XXXXXXX",
+                  		"score"=>7.0,
+                   		"overall"=>6.8,
+                 			"picURLs"=>["",""],
+                 			"tags"=>[["环境好",1],["不适合自习",5],["难喝",7]]
+                    ]
+	];
+	echo(json_encode(["error"=>"","data"=>$data]));
+}
+?>

@@ -75,7 +75,7 @@ def get_comments_list():
     return json.dumps({'data': result})
 
 # 提交评论
-@page.route('/add_comment', methods=['POST'])
+@page.route('/add_comment', methods=['POST', 'GET'])
 def add_comment():
     store_name = request.form['store_name']
     mac = request.form['mac']
@@ -85,6 +85,17 @@ def add_comment():
     result = Shops.add_comment_info(store_name, mac, content, mark)
 
     return result
+
+# 修改评论状态
+@page.route('/changeLikeStatus', methods=['POST', 'GET'])
+def change_like_status():
+    comment_id = request.args.get('id')
+    mac = request.args.get('mac')
+    liked = request.args.get('liked')
+    disliked = request.args.get('disliked')
+    result = Shops.change_like_status(comment_id, mac, liked, disliked)
+
+    return json.dumps({'data': result})
 
 # changeLikeStatus
 # s

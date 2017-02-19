@@ -44,7 +44,6 @@ class Shops:
                 store_list.append(temp['storeName'])
             list1['subTitle'] = store_list
             """
-            print type['sub_type']
             list1['subTitle'] = type['sub_type']
             store_type_list.append(list1)
 
@@ -124,7 +123,6 @@ class Shops:
         db = get_mongodb_instance()
         for comments in db.store_comments.find({'store_name': store_name,  'status': 'pass'}):
             for comment in comments['comments']:
-                print comment
                 comment_info = {}
                 #comment_info.append({'store_name': store_name})
                 comment_info['id'] = comment['comment_id']
@@ -148,13 +146,13 @@ class Shops:
                             comment_info['disliked'] = False
                 if flag:
                     #comment_info.append({'is_operation': False})
-                    comment_info['dislike'] = False
-                    comment_info['dislike'] = False
+                    comment_info['liked'] = False
+                    comment_info['disliked'] = False
                 comments_list.append(comment_info)
 
         return comments_list
 
-    # 获取评论信息
+    # 增加评论信息
     @staticmethod
     def add_comment_info(store_name, mac, content, tags, mark):
         db = get_mongodb_instance()
@@ -180,6 +178,46 @@ class Shops:
             except:
                 return {'error': 'commented'}
 
+    # 修改评论状态
+    @staticmethod
+    def change_like_status(comment_id, mac, liked, disliked):
+        db = get_mongodb_instance()
+        # 插入评论状态数据
+        data = mac + ',' + liked + ',' + disliked
+        print data + comment_id
+        #db.store_comments.update({'comments.comment_id':comment_id}, {'$push':{'comments.$.operation_mac': data}})
+        #db.store_comments.update({'comments.comment_id': comment_id}, {'$pull': {'comments.$.operation_mac': data}})
+        flag = False
+        import re
+        rule = re.compile(r'^'+mac)
+        for comment in db.store_comments.find({'comments.operation_mac':{'$regex':rule}}):
+            flag = True
+        print flag
+        if flag:
+            if liked == 'true':
+                db.store_comments.update({'comments.comment_id':comment_id},
+                                         {'$pull': {'comments.$.operation_mac': {'$regex':rule}},
+                                          '$inc':{'comments.$.like':1}})
+                db.store_comments.update({'comments.comment_id': comment_id},
+                                         {'$push': {'comments.$.operation_mac': data},
+                                          '$inc': {'comments.$.dislike': -1}})
+            else:
+                db.store_comments.update({'comments.comment_id': comment_id},
+                                         {'$pull': {'comments.$.operation_mac': {'$regex': rule}},
+                                          '$inc': {'comments.$.like': -1}})
+                db.store_comments.update({'comments.comment_id': comment_id},
+                                         {'$push': {'comments.$.operation_mac': data},
+                                          '$inc': {'comments.$.dislike': 1}})
+        else:
+            if liked == 'true':
+                db.store_comments.update({'comments.comment_id': comment_id},
+                                         {'$push': {'comments.$.operation_mac': data},
+                                          '$inc': {'comments.$.like':1}})
+            else:
+                db.store_comments.update({'comments.comment_id': comment_id},
+                                         {'$push': {'comments.$.operation_mac': data},
+                                          '$inc': {'comments.$.dislike': 1}})
+        return []
 
 
 class BackstageShops:
@@ -225,6 +263,7 @@ if __name__ == "__main__":
     #print Shops.get_index_info()[0]
     #print Shops.get_stores_list('coffee')
     #print Shops.get_comments_info('store2', '23477')
-    print Shops.get_comments_info('store2', '224335')
+    #print Shops.get_comments_info('store2', '224335')
     #print Shops.add_comment_info('store3', '32436', 'not good place!')
     #print Shops.get_store_detail('store2')
+    print Shops.change_like_status('1230545', '1234:1234:1234:1234', 'false', 'true')

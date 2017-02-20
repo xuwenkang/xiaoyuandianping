@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Upick Admin</title>
+    <link href="css/main.css" rel="stylesheet">
+    <script src="js/request.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/main.js"></script>
+</head>
+<body>
+<div>
+    <h1>添加新店</h1>
+    <p></p>
+    <form>
+        <input placeholder="店铺名称" id="name">
+        <input placeholder="店铺位置" id="position">
+        <select id="store-type">
+            <option v-for="option in ops" v-bind:value="option.value">{{option.title}}</option>
+        </select>
+        <input type="file" placeholder="店铺图片" style="display: none">
+        <div>
+            <img src="images/icon_middle.png"/>
+            <input type="button" value="点击上传图片" onclick="return(document.querySelector('input[type=\'file\']').click());">
+        </div>
+        <textarea placeholder="在这里输入店铺描述"></textarea>
+        <input type="button" id="new" title="添加新店" value="添加新店">
+    </form>
+</div>
+</body>
+<script>
+    document.querySelector("input[type='file']").onchange=function(){
+        var filereader=new FileReader();
+        filereader.readAsDataURL(document.querySelector("input[type='file']").files[0]);
+        filereader.onload=function(e){
+            document.querySelector("img").src=e.target.result;
+        };
+    };
+    var storeType = new Vue({
+        el: "#store-type",
+        data: {
+            ops:[]
+        }
+    });
+    getOptions_(function(error,data){
+         if(!error){
+             storeType.ops=data;
+         }
+    });
+    document.querySelector("#new").addEventListener("click",function(){
+        var oData = new FormData();
+        var storeName=document.querySelector("input#name").value;
+        var storePosition=document.querySelector("input#position").value;
+        var storeType=document.querySelector("select").value;
+        var storeDesc=document.querySelector("textarea").value;
+        if(storePosition===""||storeType=="0"||storeDesc===""||storeName===""){
+            alert("尚未完成的表单！");
+            return;
+        }
+        oData.append("storeName", storeName);
+        oData.append("storePosition",storePosition);
+        oData.append("storeType",storeType);
+        oData.append("storeDesc", storeDesc);
+        oData.append("img",document.querySelector("input[type='file']").files[0]);
+        var oReq = new XMLHttpRequest();
+        //oReq.open( "POST", URL_base+"uploadStoreData.php" , true );
+        oReq.open( "POST", URL_base+"/shops/add_store" , true);
+        oReq.onload = function() {
+            if (oReq.status == 200){
+                var res=JSON.parse(oReq.responseText);
+                if(!res.error){
+                    alert("添加成功！");
+                }else{
+                    alert("添加失败！");
+                }
+            }else{
+                alert("添加失败！");
+            }
+        };
+        oReq.send(oData);
+    });
+</script>
+</html>

@@ -8,12 +8,14 @@ from settings import img_pre
 class CommonUtil:
 
     # 保存图片
-    def save_img(self, img):
-        img_name = img_pre + str(uuid1()) + ".png"
+    @staticmethod
+    def save_img(img):
+        img_type = img.filename.split('.')[1]
+        img_name =  str(uuid1()) + "." + img_type
 
-        with open(img_name, 'wb') as f:
+        with open(img_pre+img_name, 'wb') as f:
             f.write(img.read())
-        return img_name
+        return 'store_images/shop-' + img_name
 
     @staticmethod
     # 验证是否已经登录

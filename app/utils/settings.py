@@ -2,4 +2,4 @@
 
 
 # 保存的店铺图片名称
-img_pre = '../templates/images/shop-'
+img_pre = '../templates/shops/store_images/shop-'

@@ -54,7 +54,7 @@ function index(url = "/shops/backstage/backstage_index"){
                       '&nbsp;&nbsp;' +
                       '<a class="button border-red" href="javascript:void(0)" onclick="return pass_store(\''+value+'\')">' +
                         '<span class="icon-check"></span> 同意 </a>';
-                    var pic_link = '<img src="../store_images/' + data.dataSet[i][5] +'" class="img-responsive margin" style="width:100%" alt="Image">';
+                    var pic_link = '<img src="../' + data.dataSet[i][5] +'" class="img-responsive margin" style="width:100%" alt="Image">';
                     //data.dataSet[i].push(pic_link);
                     data.dataSet[i][5] = pic_link;
                     data.dataSet[i].push(link);

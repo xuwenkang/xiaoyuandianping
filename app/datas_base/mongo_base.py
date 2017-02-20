@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 __author__ = 'xuwenkang'
 import pymongo
+import time
 
 
 # 判断数据库是否有数据
@@ -46,7 +47,6 @@ class Shops:
             """
             list1['subTitle'] = type['sub_type']
             store_type_list.append(list1)
-
         # 获取热门店铺
         popular_stores_list = []
         for popular_store in db.popular_stores.find():
@@ -54,15 +54,31 @@ class Shops:
 
         return (store_type_list, popular_stores_list)
 
+    # 判断店铺名称是否存在
+    @staticmethod
+    def is_exist_store(store_name):
+        db = get_mongodb_instance()
+        print store_name
+        found = False
+        for store in db.store_info.find({'store_name': store_name}):
+            if store:
+                found = True
+        return found
+
     # 保存提交的店铺信息
     @staticmethod
-    def save_store_info(storName, storePosition, storeType, storeDesc, storeImg):
+    def save_store_info(store_name, store_position, store_type, store_desc, store_img):
         db = get_mongodb_instance()
         db.store_info.insert({
-            'storeName': storName,
-            'storePosition': storePosition,
-            'storeType': storeType,
-            'storeDesc': storeDesc,
+            'store_name': store_name,
+            'store_position': store_position,
+            'store_type': store_type,
+            'store_desc': store_desc,
+            'picture': store_img,
+            'time': time.time(),
+            'status': 'waiting',
+            'score': 0,
+            'tags':[]
             })
 
     # 获取商店类型信息
@@ -85,12 +101,12 @@ class Shops:
         stores_list = []
         db = get_mongodb_instance()
         # 获取店铺列表信息
-        for store in db.store_info.find({'storeType': type_name, 'status': 'pass'}):
+        for store in db.store_info.find({'store_type': type_name, 'status': 'pass'}):
             temp_list = {}
-            temp_list['id'] = store['storeName']
-            temp_list['name'] = store['storeName']
+            temp_list['id'] = store['store_name']
+            temp_list['name'] = store['store_name']
             #temp_list.append({'address':store['storePosition']})
-            temp_list['address'] = store['storePosition']
+            temp_list['address'] = store['store_position']
             temp_list['openTime'] = store['open_time']
             temp_list['score'] = store['score']
             temp_list['overall'] = 8.4
@@ -105,10 +121,10 @@ class Shops:
         db = get_mongodb_instance()
         temp_list = {}
 
-        for store in db.store_info.find({'storeName':name, 'status': 'pass'}):
+        for store in db.store_info.find({'store_name':name, 'status': 'pass'}):
             #temp_list['id'] = store['storeName']
-            temp_list['name'] = store['storeName']
-            temp_list['address'] = store['storePosition']
+            temp_list['name'] = store['store_name']
+            temp_list['address'] = store['store_position']
             temp_list['openTime'] = store['open_time']
             temp_list['score'] = store['score']
             temp_list['picURLs'] = ['store_images/' + store['picture']]
@@ -219,7 +235,6 @@ class Shops:
                                           '$inc': {'comments.$.dislike': 1}})
         return []
 
-
 class BackstageShops:
     # 获取商店申请信息
     @staticmethod
@@ -229,10 +244,10 @@ class BackstageShops:
         store_list = []
         for store_info in store_infos:
             store = []
-            store.append(store_info['storeName'])
-            store.append(store_info['storeDesc'])
-            store.append(store_info['storePosition'])
-            store.append(store_info['storeType'])
+            store.append(store_info['store_name'])
+            store.append(store_info['store_desc'])
+            store.append(store_info['store_position'])
+            store.append(store_info['store_type'])
             store.append(store_info['time'])
             store.append(store_info['picture'])
             store_list.append(store)
@@ -242,13 +257,13 @@ class BackstageShops:
     @staticmethod
     def pass_store(store_name):
         db = get_mongodb_instance()
-        db.store_info.update({'storeName':store_name}, {'$set':{'status':'pass'}})
+        db.store_info.update({'store_name':store_name}, {'$set':{'status':'pass'}})
 
     # 申请信息不通过
     @staticmethod
     def against_store(store_name):
         db = get_mongodb_instance()
-        db.store_info.update({'storeName':store_name}, {'$set':{'status':'fail'}})
+        db.store_info.update({'store_name':store_name}, {'$set':{'status':'fail'}})
 
 if __name__ == "__main__":
     # db = get_mongodb_instance()
@@ -266,4 +281,4 @@ if __name__ == "__main__":
     #print Shops.get_comments_info('store2', '224335')
     #print Shops.add_comment_info('store3', '32436', 'not good place!')
     #print Shops.get_store_detail('store2')
-    print Shops.change_like_status('1230545', '1234:1234:1234:1234', 'false', 'true')
+    #print Shops.change_like_status('1230545', '1234:1234:1234:1234', 'false', 'true')

@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 __author__ = 'xuwenkang'
-from flask import Blueprint, request
+from flask import Blueprint, request, render_template
 from jinja2 import TemplateNotFound
 import json
 
@@ -20,18 +20,20 @@ def show(page):
 @page.route('/add_store', methods=['POST'])
 def add_store():
     try:
-        storeName = request.form.get('storeName')
-        storePosition = request.form.get('storePosition')
-        storeType = request.form.get('storeType')
-        storeDesc = request.form.get('storeDesc')
-        storeImg = request.files['img']
-
+        store_name = request.form.get('storeName')
+        store_position = request.form.get('storePosition')
+        store_type = request.form.get('storeType')
+        store_desc = request.form.get('storeDesc')
+        store_img = request.files['img']
         # 判断店铺名称是否存在
-
-        # 保存图片,返回文件名称
-        #from app.utils.common_util import CommonUtil
-        #common_util = CommonUtil()
-        #print common_util.save_img(storeImg)
+        if Shops.is_exist_store(store_name):
+            return 404
+        else:
+            # 保存图片,返回文件名称
+            from app.utils.common_util import CommonUtil
+            img_name = CommonUtil.save_img(store_img)
+            print img_name
+            Shops.save_store_info(store_name, store_position, store_type, store_desc, img_name)
 
         return json.dumps({'status': 200})
 

@@ -31,7 +31,7 @@ def backstage_login():
 @CommonUtil.authentication
 def backstage_index():
     msg = BackstageShops.get_store_info()
-    return json.dumps({'status': 200, 'dataSet':msg})
+    return json.dumps({'status': 200, 'dataSet':msg})  
 
 @back_page.route('/backstage_pass_store', methods=['POST'], endpoint='/backstage_pass_store')
 def backstage_pass_store():
@@ -50,3 +50,15 @@ def backstage_against_store ():
         return json.dumps({'status': 200, 'msg':'修改成功！'})
     except:
         return json.dumps({'status': 404, 'msg':'修改失败！'})
+
+@back_page.route('/pass_index', methods=['POST'], endpoint='/pass_index')
+@CommonUtil.authentication
+def pass_index():
+    msg = BackstageShops.get_store_info('pass')
+    return json.dumps({'status': 200, 'dataSet':msg})
+
+@back_page.route('/unpass_index', methods=['POST'], endpoint='/unpass_index')
+@CommonUtil.authentication
+def unpass_index():
+    msg = BackstageShops.get_store_info('unpass')
+    return json.dumps({'status': 200, 'dataSet':msg})

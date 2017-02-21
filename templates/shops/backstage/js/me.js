@@ -34,13 +34,11 @@ function login_validate(){
 	登录
 */
 function login(){
-	ajax_post();
-	/*
 	if (login_validate()){
-		alert("登录成功");
+		ajax_post();
 	}else{
-		alert("登录失败");
-	}*/
+		return ;
+	}
 }
 
 /*

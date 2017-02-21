@@ -99,6 +99,13 @@ def change_like_status():
 
     return json.dumps({'data': result})
 
+@page.route('/store_list_search_data', methods=['POST', 'GET'])
+def store_list_search_data():
+    keyword = request.args.get('keyword')
+    result = Shops.store_list_search_data(keyword)
+
+    return json.dumps({'data': result})
+
 # changeLikeStatus
 # s
 # comments_list

@@ -58,7 +58,6 @@ class Shops:
     @staticmethod
     def is_exist_store(store_name):
         db = get_mongodb_instance()
-        print store_name
         found = False
         for store in db.store_info.find({'store_name': store_name}):
             if store:
@@ -110,7 +109,30 @@ class Shops:
             temp_list['openTime'] = store['open_time']
             temp_list['score'] = store['score']
             temp_list['overall'] = 8.4
-            temp_list['picURLs'] = ['store_images/' + store['picture']]
+            #temp_list['picURLs'] = ['store_images/' + store['picture']]
+            temp_list['picURLs'] = [store['picture']]
+            temp_list['tags'] = store['tags']
+            stores_list.append(temp_list)
+        return stores_list
+
+    @staticmethod
+    def store_list_search_data(keyword):
+        stores_list = []
+        db = get_mongodb_instance()
+        # 获取店铺列表信息
+        import re
+        rule = re.compile(keyword)
+        for store in db.store_info.find({'store_name': {'$regex':rule}, 'status': 'pass'}):
+            temp_list = {}
+            temp_list['id'] = store['store_name']
+            temp_list['name'] = store['store_name']
+            #temp_list.append({'address':store['storePosition']})
+            temp_list['address'] = store['store_position']
+            temp_list['openTime'] = store['open_time']
+            temp_list['score'] = store['score']
+            temp_list['overall'] = 8.4
+            #temp_list['picURLs'] = ['store_images/' + store['picture']]
+            temp_list['picURLs'] = [store['picture']]
             temp_list['tags'] = store['tags']
             stores_list.append(temp_list)
         return stores_list
@@ -127,7 +149,8 @@ class Shops:
             temp_list['address'] = store['store_position']
             temp_list['openTime'] = store['open_time']
             temp_list['score'] = store['score']
-            temp_list['picURLs'] = ['store_images/' + store['picture']]
+            #temp_list['picURLs'] = ['store_images/' + store['picture']]
+            temp_list['picURLs'] = [store['picture']]
             #temp_list['tags'] = [["环境好"], ["good drink"]]
             temp_list['tags'] = store['tags']
         return temp_list
@@ -200,7 +223,6 @@ class Shops:
         db = get_mongodb_instance()
         # 插入评论状态数据
         data = mac + ',' + liked + ',' + disliked
-        print data + comment_id
         #db.store_comments.update({'comments.comment_id':comment_id}, {'$push':{'comments.$.operation_mac': data}})
         #db.store_comments.update({'comments.comment_id': comment_id}, {'$pull': {'comments.$.operation_mac': data}})
         flag = False
@@ -208,7 +230,6 @@ class Shops:
         rule = re.compile(r'^'+mac)
         for comment in db.store_comments.find({'comments.operation_mac':{'$regex':rule}}):
             flag = True
-        print flag
         if flag:
             if liked == 'true':
                 db.store_comments.update({'comments.comment_id':comment_id},
@@ -238,9 +259,9 @@ class Shops:
 class BackstageShops:
     # 获取商店申请信息
     @staticmethod
-    def get_store_info():
+    def get_store_info(status='waiting'):
         db = get_mongodb_instance()
-        store_infos = db.store_info.find({'status': 'waiting'})
+        store_infos = db.store_info.find({'status': status})
         store_list = []
         for store_info in store_infos:
             store = []
@@ -263,7 +284,7 @@ class BackstageShops:
     @staticmethod
     def against_store(store_name):
         db = get_mongodb_instance()
-        db.store_info.update({'store_name':store_name}, {'$set':{'status':'fail'}})
+        db.store_info.update({'store_name':store_name}, {'$set':{'status':'unpass'}})
 
 if __name__ == "__main__":
     # db = get_mongodb_instance()
@@ -282,3 +303,4 @@ if __name__ == "__main__":
     #print Shops.add_comment_info('store3', '32436', 'not good place!')
     #print Shops.get_store_detail('store2')
     #print Shops.change_like_status('1230545', '1234:1234:1234:1234', 'false', 'true')
+    

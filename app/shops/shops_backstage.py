@@ -26,6 +26,14 @@ def backstage_login():
     else:
         return json.dumps({'status': 404, 'msg': 'this user is not exist!'})
 
+@back_page.route('/logout', methods=['POST'])
+def logout():
+    try:
+        session.pop('user_name', None)
+        return json.dumps({'status': 200})
+    except:
+        return json.dumps({'status': 404, 'msg': 'logout failed!'})
+
 
 @back_page.route('/backstage_index', methods=['POST'], endpoint='/backstage_index')
 @CommonUtil.authentication

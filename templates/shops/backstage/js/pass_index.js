@@ -57,7 +57,7 @@ function index(url = "/shops/backstage/pass_index"){
                     var pic_link = '<img src="../' + data.dataSet[i][5] +'" class="img-responsive margin" style="width:100%" alt="Image">';
                     //data.dataSet[i].push(pic_link);
                     data.dataSet[i][5] = pic_link;
-                    data.dataSet[i].push(link);
+                    //data.dataSet[i].push(link);
                 }
                 $('#pass_example').dataTable({
                     "data": data.dataSet,
@@ -68,7 +68,7 @@ function index(url = "/shops/backstage/pass_index"){
                         { "title": "分类"},
                         { "title": "申请时间"},
                         { "title": "照片", "sWidth":"16%"},
-                        { "title": "操作", "sWidth":"16%", 'sClass': "center"}
+                        //{ "title": "操作", "sWidth":"16%", 'sClass': "center"}
                     ]
                 });
             }else{

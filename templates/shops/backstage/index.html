@@ -15,7 +15,7 @@
   <div class="logo margin-big-left fadein-top">
     <h1><img src="images/y.jpg" class="radius-circle rotate-hover" height="50" alt="" />冰岩-校园点评后台管理中心</h1>
   </div>
-  <div class="head-l"> &nbsp;&nbsp;<a class="button button-little bg-red" href="login.html"><span class="icon-power-off"></span> 退出登录</a> </div>
+  <div class="head-l"> &nbsp;&nbsp;<a class="button button-little bg-red" onclick="logout();"><span class="icon-power-off"></span> 退出登录</a> </div>
 </div>
 <div class="leftnav">
   <div class="leftnav-title"><strong><span class="icon-list"></span>菜单列表</strong></div>
@@ -24,8 +24,7 @@
     <li><a href="book.html" target="right"><span class="icon-caret-right"></span>待审核信息</a></li>
     <li><a href="pass_book.html" target="right"><span class="icon-caret-right"></span>已通过审核</a></li>  
     <li><a href="unpass_book.html" target="right"><span class="icon-caret-right"></span>未通过审核</a></li>   
-    <li><a href="pass.html" target="right"><span class="icon-caret-right"></span>修改密码</a></li>
-    <li><a href="book.html" target="right"><span class="icon-caret-right"></span>留言管理</a></li>     
+    <li><a href="pass.html" target="right"><span class="icon-caret-right"></span>修改密码</a></li>  
   </ul>
 </div>
 <script type="text/javascript">
@@ -40,6 +39,24 @@ $(function(){
 		$(this).addClass("on");
   })
 });
+function logout(){
+    var url = "/shops/backstage/logout";
+    $.ajax({
+        type: "POST",
+        url: url,
+        async:false,//同步
+        cache:false,//debug的时候设置为false
+        data:{},
+        dataType: "json",
+        success: function(data){
+            if (data.status == 200){
+                window.location.href = 'login.html';
+            }else{
+                alert(data.msg);
+            }
+        }
+    });
+}
 </script>
 <ul class="bread">
   <li><a href="{:U('Index/info')}" target="right" class="icon-home"> 首页</a></li>
@@ -47,10 +64,10 @@ $(function(){
   <li><b>当前语言：</b><span style="color:red;">中文</php></span>
 </ul>
 <div class="admin">
-  <iframe scrolling="auto" rameborder="0" src="info.html" name="right" width="100%" height="100%"></iframe>
+  <iframe scrolling="auto" rameborder="0" src="book.html" name="right" width="100%" height="100%"></iframe>
 </div>
 <div style="text-align:center;">
-<p>来源:<a href="http://www.mycodes.net/" target="_blank">源码之家</a></p>
+<!--<p>来源:<a href="http://www.mycodes.net/" target="_blank">源码之家</a></p>-->
 </div>
 </body>
 </html>

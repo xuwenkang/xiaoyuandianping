@@ -33,6 +33,19 @@ class User():
         else:
             return False
 
+    def is_login(cls, user_name):
+        db = get_mongodb_instance()
+        i = 0
+        for col in db.backstage_user_login.find({'b_user_name': user_name}):
+            i += 1
+        if 0 == i:
+            return True
+        else:
+            return False
+
+    def set_login(cls, user_name):
+        db = get_mongodb_instance()
+        db.backstage_user_login.insert({'b_user_name': user_name})
 
     # 插入注册信息
     def insert_registry_info(cls, account, password, true_name='', telephone=''):

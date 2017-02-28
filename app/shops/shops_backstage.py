@@ -19,11 +19,15 @@ def backstage_login():
     password = request.form['password']
     password = CommonUtil.strip_str(password)
 
+    if not user.is_login(user_name):
+        return json.dumps({'status': 404, 'msg': '该用户已经登录了!'})
+
     if not user.is_exist(user_name):
         if not user.validate(user_name, password):
             return json.dumps({'status': 404, 'msg': 'password is not correct!'})
         else:
             session['user_name'] = user_name
+            user.set_login(user_name)
             return json.dumps({'status': 200})
     else:
         return json.dumps({'status': 404, 'msg': 'this user is not exist!'})

@@ -7,5 +7,5 @@
  */
 
 header("content-type:application/json;char-set:UTF-8");
-echo(["error"=>""]);
+echo(["error"=>"","data"=>["a"=>$_POST['data']]]);
 ?>

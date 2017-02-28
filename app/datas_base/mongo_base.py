@@ -2,6 +2,10 @@
 __author__ = 'xuwenkang'
 import pymongo
 import time
+import uuid
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 
 # 判断数据库是否有数据
@@ -66,7 +70,7 @@ class Shops:
 
     # 保存提交的店铺信息
     @staticmethod
-    def save_store_info(store_name, store_position, store_type, store_desc, store_img):
+    def save_store_info(store_name, store_position, store_type, store_desc, store_img, store_time):
         db = get_mongodb_instance()
         db.store_info.insert({
             'store_name': store_name,
@@ -74,8 +78,9 @@ class Shops:
             'store_type': store_type,
             'store_desc': store_desc,
             'picture': store_img,
+            'open_time':store_time,
             'time': time.time(),
-            'status': 'waiting',
+            'status': 'pass',
             'score': 0,
             'tags':[]
             })
@@ -93,6 +98,20 @@ class Shops:
             temp['sub_type'] = store_type['sub_type']
             result.append(temp)
         return result
+
+    # 获取子类目
+    @staticmethod
+    def get_sub_store_type():
+        db = get_mongodb_instance()
+        store_types = db.store_type.find()
+        result = None
+        for store_type in store_types:
+            if not result:
+                result = store_type['sub_type']
+            else:
+                result.extend(store_type['sub_type'])
+        return result
+
 
     # 获取商店列表信息
     @staticmethod
@@ -228,8 +247,22 @@ class Shops:
         flag = False
         import re
         rule = re.compile(r'^'+mac)
-        for comment in db.store_comments.find({'comments.operation_mac':{'$regex':rule}}):
-            flag = True
+        #for comment in db.store_comments.find({'comments.operation_mac':{'$regex':rule}, 'comments.comment_id':comment_id}):
+        for comments in db.store_comments.find({'comments.comment_id':comment_id}):
+            for comment in comments['comments']:
+                if comment['comment_id'] == comment_id:
+                    if len(comment['operation_mac']) == 0:
+                        pass
+                    else:
+                        for ips in comment['operation_mac']:
+                            if ips.split(',')[0] == mac:
+                                print ips
+                                print data
+                                if ips == data:
+                                    return
+                                flag = True
+                    break
+
         if flag:
             if liked == 'true':
                 db.store_comments.update({'comments.comment_id':comment_id},
@@ -255,6 +288,67 @@ class Shops:
                                          {'$push': {'comments.$.operation_mac': data},
                                           '$inc': {'comments.$.dislike': 1}})
         return []
+
+    @staticmethod
+    def get_comment_data(store_name):
+        result = {}
+        # get pic
+        result['name'] = store_name
+        if Shops.is_exist_store(store_name):
+            db = get_mongodb_instance()
+            for store in db.store_info.find({'status':'pass', 'store_name':store_name}):
+                result['iconURL'] = store['picture']
+            # get tags
+            result['tags'] = Shops.get_tags()
+
+            return {"data":result}
+        else:
+            return {"error":"店铺不存在!"}
+        
+
+    @staticmethod
+    def get_tags():
+        db = get_mongodb_instance()
+        tags = []
+        for tag in db.store_tags.find():
+            temp = {}
+            temp['title'] = tag['tag_title']
+            temp['id'] = tag['tag_id']
+            tags.append(temp)
+        return tags
+
+    @staticmethod
+    def comment(id, score, title, tags, ip):
+        db = get_mongodb_instance()
+        tags_name = []
+        for tag in tags:
+            for tag_name in db.store_tags.find({'tag_id':tag}):
+                tags_name.append(tag_name['tag_title'])
+
+        #db.store_info.update({'store_name':id}, {'$push':{'tags':{'$each':tags_name}}})
+        db.store_info.update({'store_name':id}, {'$addToSet':{'tags':tags_name}})
+
+        comment_id = str(uuid.uuid1())
+        db.store_comments.update({'status':'pass', 'store_name':id}, {'$push':{'comments':
+            {'comment_id':comment_id, 'content':title, 'score':score, 'like':0, 'dislike':0, 
+            'date':time.time(), 'mac':ip,'operation_mac':[]}}}, True)
+
+        # update score
+        Shops.update_score(id)
+
+    @staticmethod
+    def update_score(store_name):
+        db = get_mongodb_instance()
+        max_score = 0
+        num = 0
+        for store in db.store_comments.find({'store_name':store_name}):
+            for comment in store['comments']:
+                max_score += int(comment['score'])
+                num += 1
+        average = round(float(max_score)/num, 1)
+
+        db.store_info.update({'store_name':store_name}, {'$set':{'score':average}})
+        
 
 class BackstageShops:
     # 获取商店申请信息
@@ -297,10 +391,31 @@ if __name__ == "__main__":
     # print get_store_type()
     #print get_store_info()
     #print Shops.get_index_info()[0]
-    #print Shops.get_stores_list('coffee')
+    #print Shops.get_stores_list('foot')
     #print Shops.get_comments_info('store2', '23477')
     #print Shops.get_comments_info('store2', '224335')
     #print Shops.add_comment_info('store3', '32436', 'not good place!')
     #print Shops.get_store_detail('store2')
     #print Shops.change_like_status('1230545', '1234:1234:1234:1234', 'false', 'true')
-    
+    #print Shops.get_sub_store_type()
+    #print Shops.get_tags()
+    #print Shops.get_comment_data('东一食堂')
+
+    #Shops.comment(u'store2', u'7', u'store2', [u'001'], '192.168.157.1')
+    """
+    from urlparse import unquote
+    import json
+    #data = {"data":"%7B%22id%22%3A%22store2%22%2C%22title%22%3A%22store2%22%2C%22tags%22%3A%5B%22002%22%5D%2C%22text%22%3A%22%E5%AD%A6%E4%B9%A0%22%2C%22score%22%3A%227%22%7D"}
+    data = '{"data":"%7B%22id%22%3A%22store2%22%2C%22title%22%3A%22store2%22%2C%22tags%22%3A%5B%22002%22%5D%2C%22text%22%3A%22%E4%B8%8D%E9%94%99%E7%9A%84%22%2C%22score%22%3A%226%22%7D"}'
+    #data = type(data['data'])
+    data = unquote(data)
+    data = data.split("{\"data\":\"")[1]
+    data = data[:len(data)-2]
+    print json.loads(data)['text']
+    #data = json.loads(data)
+    #data = json.loads(data)
+    #print data['text']
+    print unquote('\xe6\x88\x91\xe6\x93\x8d\xe4\xbd\xa0\xe5\xa6\x88'
+    """
+    #Shops.update_score('store2')
+    Shops.change_like_status('c40dbe92-fcde-11e6-be24-000c29193029', '192.168.157.1', 'true', 'false')

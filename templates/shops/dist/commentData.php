@@ -1,0 +1,39 @@
+<?php
+	header("content-type:application/json;char-set:UTF-8");
+$data=[
+"error"=>"",
+"data"=>[
+  "name"=>"老在咖啡",
+  "iconURL"=>"path/to/icon",//学长给绝对路径哦，否则目前我还真不知道怎么搞
+  "tags"=>[
+    ["title"=>"hbyn1","id"=>545],
+      ["title"=>"nhhg2","id"=>545],
+      ["title"=>"gvddv3","id"=>545],
+      ["title"=>"ebv4","id"=>545],
+      ["title"=>"好喝5","id"=>545],
+      ["title"=>"好喝asf6","id"=>545],
+      ["title"=>"好喝aumtj8","id"=>545],
+      ["title"=>"好喝hn9","id"=>545],
+      ["title"=>"好喝fgcvf10","id"=>545],
+      ["title"=>"vghgh11","id"=>545],
+      ["title"=>"fhnjhg12","id"=>545],
+      ["title"=>"tybg13","id"=>545],
+      ["title"=>"etyrh14","id"=>545],
+      ["title"=>"thrytu15","id"=>545],
+      ["title"=>"rfgtb17","id"=>545],
+      ["title"=>"vgbhnj18","id"=>545],
+      ["title"=>"tyrhn19","id"=>545],
+      ["title"=>"weregt20","id"=>545],
+      ["title"=>"imj21","id"=>545],
+      ["title"=>"rfgtb17","id"=>545],
+      ["title"=>"vgbhnj18","id"=>545],
+      ["title"=>"tyrhn19","id"=>545],
+      ["title"=>"weregt20","id"=>545],
+      ["title"=>"imj21","id"=>545],
+      ["title"=>"imj21","id"=>545],
+      ["title"=>"好喝cd22","id"=>545]//前面提到过，这里不需要提供数量
+    ]
+  ]
+];
+echo(json_encode($data));
+?>

@@ -15,8 +15,9 @@
     <form>
         <input placeholder="店铺名称" id="name">
         <input placeholder="店铺位置" id="position">
+        <input placeholder="营业时间" id="time">
         <select id="store-type">
-            <option v-for="option in ops" v-bind:value="option.value">{{option.title}}</option>
+            <option v-for="option in ops" v-bind:value="option">{{option}}</option>
         </select>
         <input type="file" placeholder="店铺图片" style="display: none">
         <div>
@@ -42,7 +43,7 @@
             ops:[]
         }
     });
-    getOptions_(function(error,data){
+    getOptions(function(error,data){
          if(!error){
              storeType.ops=data;
          }
@@ -50,15 +51,17 @@
     document.querySelector("#new").addEventListener("click",function(){
         var oData = new FormData();
         var storeName=document.querySelector("input#name").value;
+        var storeTime=document.querySelector("input#time").value;
         var storePosition=document.querySelector("input#position").value;
         var storeType=document.querySelector("select").value;
         var storeDesc=document.querySelector("textarea").value;
-        if(storePosition===""||storeType=="0"||storeDesc===""||storeName===""){
+        if(storePosition===""||storeType=="0"||storeDesc===""||storeName===""||storeTime===""){
             alert("尚未完成的表单！");
             return;
         }
         oData.append("storeName", storeName);
         oData.append("storePosition",storePosition);
+        oData.append("storeTime",storeTime);
         oData.append("storeType",storeType);
         oData.append("storeDesc", storeDesc);
         oData.append("img",document.querySelector("input[type='file']").files[0]);

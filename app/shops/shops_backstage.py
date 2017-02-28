@@ -3,7 +3,7 @@ __author__ = 'xuwenkang'
 from flask import request, session, Blueprint
 import json
 
-from app.datas_base.mongo_base import BackstageShops
+from app.datas_base.mongo_base import BackstageShops, Shops
 from app.utils.common_util import CommonUtil
 from app.shops.backstage.user import User
 
@@ -70,3 +70,9 @@ def pass_index():
 def unpass_index():
     msg = BackstageShops.get_store_info('unpass')
     return json.dumps({'status': 200, 'dataSet':msg})
+
+
+@back_page.route('/get_sub_store_types', methods=['GET'])
+def get_sub_store_type():
+    result = Shops.get_sub_store_type()
+    return json.dumps({'data':result}), {'Content-Type': 'application/json'}

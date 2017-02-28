@@ -2,7 +2,12 @@
 __author__ = 'xuwenkang'
 from flask import Blueprint, request, render_template
 from jinja2 import TemplateNotFound
+import urllib
 import json
+from urlparse import unquote
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 from app.datas_base.mongo_base import Shops
 
@@ -25,6 +30,7 @@ def add_store():
         store_type = request.form.get('storeType')
         store_desc = request.form.get('storeDesc')
         store_img = request.files['img']
+        store_time = request.form.get('storeTime')
         # 判断店铺名称是否存在
         if Shops.is_exist_store(store_name):
             return 404
@@ -33,7 +39,7 @@ def add_store():
             from app.utils.common_util import CommonUtil
             img_name = CommonUtil.save_img(store_img)
             print img_name
-            Shops.save_store_info(store_name, store_position, store_type, store_desc, img_name)
+            Shops.save_store_info(store_name, store_position, store_type, store_desc, img_name, store_time)
 
         return json.dumps({'status': 200})
 
@@ -46,6 +52,7 @@ def get_store_types():
     result = Shops.get_store_type()
     return json.dumps(result)
 
+
 # 主页
 @page.route('/', methods=['POST', 'GET'])
 @page.route('/index', methods=['POST', 'GET'])
@@ -57,6 +64,7 @@ def index():
 @page.route('/store_list_data', methods=['POST', 'GET'])
 def get_stores_list():
     type_name = request.args.get('type')
+    print type_name
     result = Shops.get_stores_list(type_name)
     return json.dumps({'data': result})
 
@@ -72,9 +80,11 @@ def get_store_detail():
 def get_comments_list():
     store_name = request.args.get('id')
     #mac = request.form['mac']
-    mac = '123'
+    # mac means ip
+    mac = request.remote_addr
+    print mac
     result = Shops.get_comments_info(store_name, mac)
-    return json.dumps({'data': result})
+    return json.dumps({'error':'', 'data': result})
 
 # 提交评论
 @page.route('/add_comment', methods=['POST', 'GET'])
@@ -92,12 +102,16 @@ def add_comment():
 @page.route('/changeLikeStatus', methods=['POST', 'GET'])
 def change_like_status():
     comment_id = request.args.get('id')
-    mac = request.args.get('mac')
+    ip = request.remote_addr
     liked = request.args.get('liked')
     disliked = request.args.get('disliked')
-    result = Shops.change_like_status(comment_id, mac, liked, disliked)
+    if liked == 'false' and disliked == 'false':
+        return json.dumps({'error':'msg'})
 
-    return json.dumps({'data': result})
+    result = Shops.change_like_status(comment_id, ip, liked, disliked)
+    return json.dumps({'error':'', 'data':{'result':{'liked':'true','disliked':'false'}}})
+    #return json.dumps({'error':'', 'data':{'result':{'liked':True,'disliked':False}}})   
+
 
 @page.route('/store_list_search_data', methods=['POST', 'GET'])
 def store_list_search_data():
@@ -106,8 +120,33 @@ def store_list_search_data():
 
     return json.dumps({'data': result})
 
-# changeLikeStatus
-# s
-# comments_list
-# store_list_search_data
-# store_list_data
+
+@page.route('/comment_data', methods=['GET'])
+def get_comment_data():
+    store_name = request.args.get('id')
+    result = Shops.get_comment_data(store_name)
+
+    return json.dumps(result)
+
+
+@page.route('/comment', methods=['GET', 'POST'])
+def comment():
+    try:
+        #url = json.loads(request.get_data())['data']
+        url = request.get_data()
+        url = unquote(url)
+        print url
+        data = url.split("{\"data\":\"")[1]
+        data = data[:len(data)-2]
+        data = json.loads(data)
+        store_id = data['title']
+        store_score = data['score']
+        store_title = data['text']
+        print store_title
+        store_tags = data['tags']
+        ip = request.remote_addr
+
+        Shops.comment(store_id, store_score, store_title, store_tags, ip)
+        return json.dumps({"error":''})
+    except:
+        return json.dumps({'error':'error'})

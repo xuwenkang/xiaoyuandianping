@@ -15,7 +15,9 @@ back_page = Blueprint('backstage_page', __name__, template_folder='templates')
 def backstage_login():
 
     user_name = request.form['user_name']
+    user_name = CommonUtil.strip_str(user_name)
     password = request.form['password']
+    password = CommonUtil.strip_str(password)
 
     if not user.is_exist(user_name):
         if not user.validate(user_name, password):
@@ -53,6 +55,7 @@ def backstage_pass_store():
 @back_page.route('/backstage_against_store', methods=['POST'], endpoint='/backstage_against_store')
 def backstage_against_store ():
     store_name = request.form['store_name']
+    store_name = CommonUtil.strip_str(store_name)
     try:
         BackstageShops.against_store(store_name)
         return json.dumps({'status': 200, 'msg':'修改成功！'})

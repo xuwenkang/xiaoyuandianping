@@ -2,6 +2,7 @@
 from uuid import uuid1
 from flask import session
 import json
+import re
 
 from settings import img_pre
 
@@ -12,7 +13,6 @@ class CommonUtil:
     def save_img(img):
         img_type = img.filename.split('.')[1]
         img_name =  str(uuid1()) + "." + img_type
-
         with open(img_pre+img_name, 'wb') as f:
             f.write(img.read())
         return 'store_images/shop-' + img_name
@@ -27,3 +27,6 @@ class CommonUtil:
                 return json.dumps({'status': 404, 'msg': 'please login first!'})
         return wrapper
 
+    @staticmethod 
+    def strip_str(value):
+        return value.replace('$', '').replace('{', '').replace('}', '')

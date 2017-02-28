@@ -25,6 +25,10 @@ def get_mongodb_instance(db='test'):
     """
     from settings import MONGO_HOST, MONGO_PORT
     client = pymongo.MongoClient(MONGO_HOST, MONGO_PORT)
+    try:
+        client.shops.authenticate("xwk","xwk")
+    except:
+        print 'password is not correctily!'
     # the default data_base name is shops
     return client.shops
 

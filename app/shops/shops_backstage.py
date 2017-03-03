@@ -19,8 +19,8 @@ def backstage_login():
     password = request.form['password']
     password = CommonUtil.strip_str(password)
 
-    if not user.is_login(user_name):
-        return json.dumps({'status': 404, 'msg': '该用户已经登录了!'})
+    #if not user.is_login(user_name):
+        #return json.dumps({'status': 404, 'msg': '该用户已经登录了!'})
 
     if not user.is_exist(user_name):
         if not user.validate(user_name, password):
@@ -83,3 +83,28 @@ def unpass_index():
 def get_sub_store_type():
     result = Shops.get_sub_store_type()
     return json.dumps({'data':result}), {'Content-Type': 'application/json'}
+
+@back_page.route('/add_tags', methods=['POST'], endpoint='/add_tags')
+@CommonUtil.authentication
+def add_tags():
+    title = request.form['title']
+    cate = request.form['cate']
+    try:
+        msg = BackstageShops.add_tag(title, cate)
+        return json.dumps({'status': 200})
+    except:
+        return json.dumps({'status': 404, 'msg':'该标签已经存在了！'})
+
+@back_page.route('/get_tags', methods=['POST'], endpoint='/get_tags')
+@CommonUtil.authentication
+def get_tags():
+    msg = BackstageShops.get_tags()
+    return json.dumps({'status': 200, 'dataSet':msg})
+
+@back_page.route('/delete_tags', methods=['POST'], endpoint='/delete_tags')
+@CommonUtil.authentication
+def delete_tags():
+    sub_type = request.form['sub_type'];
+    type_name = request.form['type_name'];
+    msg = BackstageShops.delete_tag(type_name, sub_type)
+    return json.dumps({'status': 200, 'msg':msg})

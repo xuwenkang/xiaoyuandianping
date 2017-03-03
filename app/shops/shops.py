@@ -114,7 +114,7 @@ def change_like_status():
     disliked = request.args.get('disliked')
     disliked = CommonUtil.strip_str(disliked)
     if liked == 'false' and disliked == 'false':
-        return json.dumps({'error':'msg'})
+        return json.dumps({'error':''})
 
     result = Shops.change_like_status(comment_id, ip, liked, disliked)
     return json.dumps({'error':'', 'data':{'result':{'liked':'true','disliked':'false'}}})
@@ -151,11 +151,11 @@ def comment():
         store_id = data['title']
         store_id = CommonUtil.strip_str(store_id)
         store_score = data['score']
-        store_score = CommonUtil.strip_str(store_score)
+        #store_score = CommonUtil.strip_str(store_score)
         store_title = data['text']
         store_title = CommonUtil.strip_str(store_title)
         store_tags = data['tags']
-        store_tags = CommonUtil.strip_str(store_tags)
+        #store_tags = CommonUtil.strip_str(store_tags)
         ip = request.remote_addr
 
         Shops.comment(store_id, store_score, store_title, store_tags, ip)

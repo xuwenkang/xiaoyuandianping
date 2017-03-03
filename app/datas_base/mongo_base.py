@@ -25,10 +25,10 @@ def get_mongodb_instance(db='test'):
     """
     from settings import MONGO_HOST, MONGO_PORT
     client = pymongo.MongoClient(MONGO_HOST, MONGO_PORT)
-    try:
-        client.shops.authenticate("xwk","xwk")
-    except:
-        print 'password is not correctily!'
+    #try:
+     #   client.shops.authenticate("xwk","xwk")
+    #except:
+     #   print 'password is not correctily!'
     # the default data_base name is shops
     return client.shops
 
@@ -383,6 +383,28 @@ class BackstageShops:
     def against_store(store_name):
         db = get_mongodb_instance()
         db.store_info.update({'store_name':store_name}, {'$set':{'status':'unpass'}})
+
+    @staticmethod
+    def get_tags():
+        db = get_mongodb_instance()
+        result = []
+        for tag in db.store_type.find():
+            title = tag['type_name']
+            for sub in tag['sub_type']:
+                result.append([title, sub])
+        return result
+
+    @staticmethod
+    def delete_tag(type_name, sub_type):
+        db = get_mongodb_instance()
+        db.store_type.update({'type_name':type_name}, {'$pop':{'sub_type':sub_type}})
+
+    @staticmethod
+    def add_tag(title, cate):
+        db = get_mongodb_instance()
+        db.store_type.update({'type_name':cate}, {'$push':{'sub_type':title}})
+
+
 
 if __name__ == "__main__":
     # db = get_mongodb_instance()

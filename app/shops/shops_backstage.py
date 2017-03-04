@@ -88,9 +88,8 @@ def get_sub_store_type():
 @CommonUtil.authentication
 def add_tags():
     title = request.form['title']
-    cate = request.form['cate']
     try:
-        msg = BackstageShops.add_tag(title, cate)
+        msg = BackstageShops.add_tag(title)
         return json.dumps({'status': 200})
     except:
         return json.dumps({'status': 404, 'msg':'该标签已经存在了！'})
@@ -104,7 +103,20 @@ def get_tags():
 @back_page.route('/delete_tags', methods=['POST'], endpoint='/delete_tags')
 @CommonUtil.authentication
 def delete_tags():
+    type_name = request.form['type_name'];
+    msg = BackstageShops.delete_tag(type_name)
+    return json.dumps({'status': 200, 'msg':msg})
+
+@back_page.route('/get_types', methods=['POST'], endpoint='/get_types')
+@CommonUtil.authentication
+def get_types():
+    msg = BackstageShops.get_types()
+    return json.dumps({'status': 200, 'dataSet':msg})
+
+@back_page.route('/delete_types', methods=['POST'], endpoint='/delete_types')
+@CommonUtil.authentication
+def delete_types():
     sub_type = request.form['sub_type'];
     type_name = request.form['type_name'];
-    msg = BackstageShops.delete_tag(type_name, sub_type)
+    msg = BackstageShops.get_types(type_name, sub_type)
     return json.dumps({'status': 200, 'msg':msg})

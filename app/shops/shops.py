@@ -42,9 +42,9 @@ def add_store():
             return 404
         else:
             # 保存图片,返回文件名称
-            img_name = CommonUtil.save_img(store_img)
+            (img_name,width, height) = CommonUtil.save_img(store_img)
             print img_name
-            Shops.save_store_info(store_name, store_position, store_type, store_desc, img_name, store_time)
+            Shops.save_store_info(store_name, store_position, store_type, store_desc, img_name, store_time, width, height)
 
         return json.dumps({'status': 200})
 

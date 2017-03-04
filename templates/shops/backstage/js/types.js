@@ -15,13 +15,30 @@ document.onkeydown=function(event){
     }
 }; 
 
+/*
+	登录信息验证
+*/
+function login_validate(){
+	if (!validate_string('name', 4, 16, false, "账户")){
+		$("input[name='name']").focus();
+		return false;
+	}
+	if (!validate_string('password', 4, 16, false, "密码")){
+		$("input[name='password']").focus();
+		return false;
+	}
+	return true;
+}
 
 /*
 	登录
 */
 function submit_tags(){
 	var title = $("input[name='title']").val();
-	ajax_post(title);
+	var obj = document.getElementById('cate'); //定位id
+	var index = obj.selectedIndex; // 选中索引
+	var cate = obj.options[index].value; // 选中值
+	ajax_post(title, cate);
 	return ;
 }
 
@@ -56,21 +73,21 @@ function validate_string(name, min_length, max_length, isEmpty, ch_name){
 /*
 	ajax 传输数据
 */
-function ajax_post(title){
-	var url = "/shops/backstage/add_tags";
+function ajax_post(title, cate){
+	var url = "/shops/backstage/add_types";
     $.ajax({
         type: "POST",
         url: url,
         async:false,//同步
         cache:false,//debug的时候设置为false
-        data:{'title': title},
+        data:{'title': title, 'cate': cate},
         dataType: "json",
         success: function(data){
             //var userName = data.userName;
             if (data.status == 200)
                 //window.parent.window.location.href = 'add_tags.html';
             	  //alert('添加成功!');
-            	  window.location.href = 'tags.html';
+            	  window.location.href = 'types.html';
             else
                 alert(data.msg);
         }
@@ -88,7 +105,7 @@ var dataSet = [
 // 初始化数据
 function index(url = "/shops/backstage/backstage_index"){
     //通过 ajax 获取店铺申请信息
-    var url = "/shops/backstage/get_tags";
+    var url = "/shops/backstage/get_types";
     $.ajax({
         type: "POST",
         url: url,
@@ -109,8 +126,8 @@ function index(url = "/shops/backstage/backstage_index"){
                 $('#example').dataTable({
                     "data": data.dataSet,
                     "columns": [
-                        { "title": "标签" },
-                        { "title": "编号"},
+                        { "title": "分类" },
+                        { "title": "名称"},
                         { "title": "操作", "sWidth":"10%", 'sClass': "center"}
                     ]
                 });
@@ -126,7 +143,7 @@ $(document).ready(function() {
 // 审核通过
 function delete_tags(id, value){
     if(confirm("您确定要删除吗?")){
-        operate_tags(id, value, "/shops/backstage/delete_tags");
+        operate_tags(id, value, "/shops/backstage/delete_types");
 	}
 }
 // ajax

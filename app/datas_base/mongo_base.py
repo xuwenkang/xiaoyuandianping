@@ -74,7 +74,7 @@ class Shops:
 
     # 保存提交的店铺信息
     @staticmethod
-    def save_store_info(store_name, store_position, store_type, store_desc, store_img, store_time):
+    def save_store_info(store_name, store_position, store_type, store_desc, store_img, store_time, width, height):
         db = get_mongodb_instance()
         db.store_info.insert({
             'store_name': store_name,
@@ -86,7 +86,9 @@ class Shops:
             'time': time.time(),
             'status': 'pass',
             'score': 0,
-            'tags':[]
+            'tags':[],
+            'weight':width,
+            'height':height
             })
 
     # 获取商店类型信息
@@ -133,7 +135,8 @@ class Shops:
             temp_list['score'] = store['score']
             temp_list['overall'] = 8.4
             #temp_list['picURLs'] = ['store_images/' + store['picture']]
-            temp_list['picURLs'] = [store['picture']]
+            #temp_list['picURLs'] = [store['picture']]
+            temp_list['picURLs'] = [{'src':store['picture'], 'msrc':'small_'+store['picture'], 'w':store['weight'], 'h':store['height']}]
             temp_list['tags'] = store['tags']
             stores_list.append(temp_list)
         return stores_list
@@ -155,7 +158,8 @@ class Shops:
             temp_list['score'] = store['score']
             temp_list['overall'] = 8.4
             #temp_list['picURLs'] = ['store_images/' + store['picture']]
-            temp_list['picURLs'] = [store['picture']]
+            #temp_list['picURLs'] = [store['picture']]
+            temp_list['picURLs'] = [{'src':store['picture'], 'msrc':'small_'+store['picture'], 'w':store['weight'], 'h':store['height']}]
             temp_list['tags'] = store['tags']
             stores_list.append(temp_list)
         return stores_list
@@ -173,7 +177,8 @@ class Shops:
             temp_list['openTime'] = store['open_time']
             temp_list['score'] = store['score']
             #temp_list['picURLs'] = ['store_images/' + store['picture']]
-            temp_list['picURLs'] = [store['picture']]
+            #temp_list['picURLs'] = [store['picture']]
+            temp_list['picURLs'] = [{'src':store['picture'], 'msrc':'small_'+store['picture'], 'w':store['weight'], 'h':store['height']}]
             #temp_list['tags'] = [["环境好"], ["good drink"]]
             temp_list['tags'] = store['tags']
         return temp_list
@@ -388,6 +393,26 @@ class BackstageShops:
     def get_tags():
         db = get_mongodb_instance()
         result = []
+        for tag in db.store_tags.find():
+            result.append([tag['tag_title'], tag['tag_id']])
+        return result
+
+    @staticmethod
+    def delete_tag(title):
+        db = get_mongodb_instance()
+        db.store_tags.remove({'tag_title':title})
+
+    @staticmethod
+    def add_tag(title):
+        db = get_mongodb_instance()
+        # if exist
+        tag_id = str(uuid.uuid1())
+        db.store_tags.update({'tag_title':title}, {'$set':{'tag_id':tag_id}}, True)
+
+    @staticmethod
+    def get_types():
+        db = get_mongodb_instance()
+        result = []
         for tag in db.store_type.find():
             title = tag['type_name']
             for sub in tag['sub_type']:
@@ -395,12 +420,12 @@ class BackstageShops:
         return result
 
     @staticmethod
-    def delete_tag(type_name, sub_type):
+    def delete_types(type_name, sub_type):
         db = get_mongodb_instance()
         db.store_type.update({'type_name':type_name}, {'$pop':{'sub_type':sub_type}})
 
     @staticmethod
-    def add_tag(title, cate):
+    def add_types(title, cate):
         db = get_mongodb_instance()
         db.store_type.update({'type_name':cate}, {'$push':{'sub_type':title}})
 

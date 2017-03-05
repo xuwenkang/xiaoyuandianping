@@ -162,3 +162,8 @@ def comment():
         return json.dumps({"error":''})
     except:
         return json.dumps({'error':'error'})
+
+@page.route('/storeFormData', methods=['GET', 'POST'])
+def get_store_form_data():
+    result = Shops.get_store_form_data()
+    return json.dumps({'data':'sb'})

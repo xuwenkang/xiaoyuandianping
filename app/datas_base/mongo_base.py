@@ -56,11 +56,32 @@ class Shops:
             list1['subTitle'] = type['sub_type']
             store_type_list.append(list1)
         # 获取热门店铺
-        popular_stores_list = []
-        for popular_store in db.popular_stores.find():
-            popular_stores_list.append(popular_store['store_name'])
+        popular_stores_list = Shops.get_popular_stores()
 
         return (store_type_list, popular_stores_list)
+
+    @staticmethod
+    def get_popular_stores():
+        db = get_mongodb_instance()
+        popular_stores_list = []
+        store_list = []
+        result = []
+
+        for popular_store in db.popular_stores.find():
+            #popular_stores_list.append(popular_store['store_name'])
+            store_list.append({'store_name':popular_store['store_name'], 
+                'score':popular_store['score'],'number':popular_store['number']})
+
+        store_list.sort(key=lambda obj:obj.get('score'), reverse=True)
+        popular_stores_list.extend(store_list[:4])
+
+        store_list.sort(key=lambda obj:obj.get('number'), reverse=True)
+        popular_stores_list.extend(store_list[:4])
+
+        for store in popular_stores_list:
+            result.append(store['store_name'])
+
+        return list(set(result))
 
     # 判断店铺名称是否存在
     @staticmethod
@@ -90,6 +111,8 @@ class Shops:
             'weight':width,
             'height':height
             })
+        # popular 
+        db.popular_stores.insert({'store_name':store_name, 'score':0.0, 'number':0})
 
     # 获取商店类型信息
     @staticmethod
@@ -181,6 +204,10 @@ class Shops:
             temp_list['picURLs'] = [{'src':store['picture'], 'msrc':'small_'+store['picture'], 'w':store['weight'], 'h':store['height']}]
             #temp_list['tags'] = [["环境好"], ["good drink"]]
             temp_list['tags'] = store['tags']
+
+        # update click number
+        db.popular_stores.update({'store_name':name}, {'$inc':{'number':1}}, True)
+
         return temp_list
 
     # 获取评论信息
@@ -357,7 +384,23 @@ class Shops:
         average = round(float(max_score)/num, 1)
 
         db.store_info.update({'store_name':store_name}, {'$set':{'score':average}})
+        db.popular_stores.update({'store_name':store_name}, {'$set':{'score':average}, 
+            '$inc':{'number':1}}, True)
         
+
+    @staticmethod
+    def get_store_form_data():
+        db = get_mongodb_instance()
+        store_types = db.store_type.find()
+        result = None
+        for store_type in store_types:
+            if not result:
+                result = store_type['sub_type']
+            else:
+                result.extend(store_type['sub_type'])
+        return result
+
+
 
 class BackstageShops:
     # 获取商店申请信息
@@ -469,4 +512,6 @@ if __name__ == "__main__":
     print unquote('\xe6\x88\x91\xe6\x93\x8d\xe4\xbd\xa0\xe5\xa6\x88'
     """
     #Shops.update_score('store2')
-    Shops.change_like_status('c40dbe92-fcde-11e6-be24-000c29193029', '192.168.157.1', 'true', 'false')
+    #Shops.change_like_status('c40dbe92-fcde-11e6-be24-000c29193029', '192.168.157.1', 'true', 'false')
+    #Shops.update_score('store2')
+    Shops.get_popular_stores()

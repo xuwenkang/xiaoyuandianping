@@ -67,7 +67,7 @@
         oData.append("img",document.querySelector("input[type='file']").files[0]);
         var oReq = new XMLHttpRequest();
         //oReq.open( "POST", URL_base+"uploadStoreData.php" , true );
-        oReq.open( "POST", URL_base+"/shops/add_store" , true);
+        oReq.open( "POST", URL_base+"/shops/add_store_backstage" , true);
         oReq.onload = function() {
             if (oReq.status == 200){
                 var res=JSON.parse(oReq.responseText);

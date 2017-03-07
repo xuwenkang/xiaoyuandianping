@@ -114,6 +114,23 @@ class Shops:
         # popular 
         db.popular_stores.insert({'store_name':store_name, 'score':0.0, 'number':0})
 
+    # by user
+    @staticmethod
+    def add_store_by_user(sub_type, name, addr, open_time, desc):
+        db = get_mongodb_instance()
+        db.store_info_by_user.insert({
+            'store_name': name,
+            'store_position': addr,
+            'store_type': sub_type,
+            'store_desc': desc,
+            'open_time':open_time,
+            'time': time.time(),
+            'status': 'waiting',
+            })
+        return 
+
+
+
     # 获取商店类型信息
     @staticmethod
     def get_store_type():
@@ -395,10 +412,18 @@ class Shops:
         result = None
         for store_type in store_types:
             if not result:
-                result = store_type['sub_type']
+                for temp in store_type['sub_type']:
+                    result = [{'name':temp, 'id':temp}]
             else:
-                result.extend(store_type['sub_type'])
-        return result
+                for temp in store_type['sub_type']:
+                    result.append({'name':temp, 'id':temp})
+
+        return [
+        {'title': "类型", 'placeholder': "必填", 'inputType': "select", 'necessary': "true",'ops':result},
+        {'title': "商家名称",'placeholder': "必填",'inputType': "shortText",'necessary': "true"},
+        {'title': "地址", 'placeholder': "请描述具体位置", 'inputType': "shortText", 'necessary': "true",},
+        {'title': "营业时间",'placeholder': "选填",'inputType': "shortText",'necessary': "false"},
+        {'title': "描述",'placeholder': "选填",'inputType': "longText",'necessary': "false"}]
 
 
 
@@ -407,7 +432,7 @@ class BackstageShops:
     @staticmethod
     def get_store_info(status='waiting'):
         db = get_mongodb_instance()
-        store_infos = db.store_info.find({'status': status})
+        store_infos = db.store_info_by_user.find({'status': status})
         store_list = []
         for store_info in store_infos:
             store = []
@@ -415,8 +440,12 @@ class BackstageShops:
             store.append(store_info['store_desc'])
             store.append(store_info['store_position'])
             store.append(store_info['store_type'])
-            store.append(store_info['time'])
-            store.append(store_info['picture'])
+            apply_time = float(store_info['time'])
+            ISOTIMEFORMAT = '%Y-%m-%d %X'
+            apply_time = time.strftime( ISOTIMEFORMAT, time.localtime(apply_time))
+            store.append(apply_time)
+            #store.append(store_info['picture'])
+            store.append('')
             store_list.append(store)
         return store_list
 
@@ -424,13 +453,13 @@ class BackstageShops:
     @staticmethod
     def pass_store(store_name):
         db = get_mongodb_instance()
-        db.store_info.update({'store_name':store_name}, {'$set':{'status':'pass'}})
+        db.store_info_by_user.update({'store_name':store_name}, {'$set':{'status':'pass'}})
 
     # 申请信息不通过
     @staticmethod
     def against_store(store_name):
         db = get_mongodb_instance()
-        db.store_info.update({'store_name':store_name}, {'$set':{'status':'unpass'}})
+        db.store_info_by_user.update({'store_name':store_name}, {'$set':{'status':'unpass'}})
 
     @staticmethod
     def get_tags():
@@ -514,4 +543,5 @@ if __name__ == "__main__":
     #Shops.update_score('store2')
     #Shops.change_like_status('c40dbe92-fcde-11e6-be24-000c29193029', '192.168.157.1', 'true', 'false')
     #Shops.update_score('store2')
-    Shops.get_popular_stores()
+    #Shops.get_popular_stores()
+    print Shops.get_store_form_data()

@@ -23,8 +23,8 @@ def show(page):
 """
 
 
-@page.route('/add_store', methods=['POST'])
-def add_store():
+@page.route('/add_store_backstage', methods=['POST'])
+def add_store_backstage():
     try:
         store_name = request.form.get('storeName')
         store_name = CommonUtil.strip_str(store_name)
@@ -163,7 +163,29 @@ def comment():
     except:
         return json.dumps({'error':'error'})
 
-@page.route('/storeFormData', methods=['GET', 'POST'])
+@page.route('/storeFormData', methods=['GET'])
 def get_store_form_data():
     result = Shops.get_store_form_data()
-    return json.dumps({'data':'sb'})
+    return json.dumps({'data':result, 'error':''})
+
+# add store by user
+@page.route('/add_store', methods=['POST'])
+def add_store_by_user():
+    url = request.get_data()
+    url = unquote(url)
+    data = url.split("{\"data\":\"")[1]
+    data = data[:len(data)-2]
+    data = json.loads(data)
+    sub_type = data[0]['ops'][0]['name']
+    sub_type = CommonUtil.strip_str(sub_type)
+    name = data[1]['value']
+    name = CommonUtil.strip_str(name)
+    addr = data[2]['value']
+    addr = CommonUtil.strip_str(addr)
+    open_time = data[3]['value']
+    open_time = CommonUtil.strip_str(open_time)
+    desc = data[4]['value']
+    desc = CommonUtil.strip_str(desc)
+    result = Shops.add_store_by_user(sub_type, name, addr, open_time, desc)
+
+    return json.dumps({'error':''})

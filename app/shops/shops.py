@@ -117,7 +117,8 @@ def change_like_status():
         return json.dumps({'error':''})
 
     result = Shops.change_like_status(comment_id, ip, liked, disliked)
-    return json.dumps({'error':'', 'data':{'result':{'liked':'true','disliked':'false'}}})
+    #return json.dumps({'error':'', 'data':{'result':{'liked':'true','disliked':'True'}}}), {'Content-Type': 'application/json'}
+    return json.dumps({'error':'', 'data':{'result':{}}}),{'Content-Type': 'application/json'}
     #return json.dumps({'error':'', 'data':{'result':{'liked':True,'disliked':False}}})   
 
 
